@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   entorno: 'test',
-  autenticacion: true,
+  autenticacion: false,
   notificaciones: true,
   menuApps: false,
   appname: 'practicampo',
