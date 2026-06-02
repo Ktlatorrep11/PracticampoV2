@@ -1,5 +1,4 @@
-<ng-uui-oas [environment]="environment"></ng-uui-oas>
+<ng-uui-oas *ngIf="environment.autenticacion" [environment]="environment"></ng-uui-oas>
 <div *ngIf="loadRouting">
     <router-outlet></router-outlet>
 </div>
-

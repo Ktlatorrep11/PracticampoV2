@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Router, NavigationEnd } from '@angular/router';
 import { UserService } from './pages/services/userService';
+
 declare let gtag: (config: string, code: string, path: any) => void;
 
 @Component({
@@ -12,26 +13,32 @@ declare let gtag: (config: string, code: string, path: any) => void;
 export class AppComponent implements OnInit {
   loadRouting = false;
   environment = environment;
-  loadingRouter: boolean;
+  loadingRouter?: boolean;
   title = 'practicampo-cliente';
+
   constructor(
     private router: Router,
     private userService: UserService,
   ) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        gtag('config', 'G-RBY2GQV40M',
-          {
+        try {
+          gtag('config', 'G-RBY2GQV40M', {
             page_path: event.urlAfterRedirects
-          }
-        );
+          });
+        } catch (e) {}
       }
-    }
-    );
+    });
   }
 
   ngOnInit(): void {
+    if (!environment.autenticacion) {
+      this.loadRouting = true;
+      return;
+    }
+
     const oas = document.querySelector('ng-uui-oas');
+    if (!oas) return;
 
     oas.addEventListener('user', (event: any) => {
       if (event.detail) {
@@ -42,7 +49,7 @@ export class AppComponent implements OnInit {
 
     oas.addEventListener('option', (event: any) => {
       if (event.detail) {
-        setTimeout(() => (this.router.navigate([event.detail.Url])), 50);
+        setTimeout(() => this.router.navigate([event.detail.Url]), 50);
       }
     });
 
@@ -51,6 +58,5 @@ export class AppComponent implements OnInit {
         console.log(event.detail);
       }
     });
-
   }
 }

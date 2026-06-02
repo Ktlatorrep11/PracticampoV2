@@ -13,14 +13,11 @@ const routes: Routes = [{
       path: 'dashboard',
       component: DashboardComponent,
     },
-/* Ejemplo ruta con guards
     {
-      path: 'plantillas',
-      component: PlantillasComponent,
-      canActivate: [NavGuard, RoleGuard],
-      runGuardsAndResolvers: 'always',
+      path: 'programaciones',
+      loadChildren: () => import('./programacion/programacion.module')
+        .then(m => m.ProgramacionModule),
     },
-*/
     {
       path: '', redirectTo: 'dashboard', pathMatch: 'full',
     },
