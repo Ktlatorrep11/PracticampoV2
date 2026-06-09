@@ -1,0 +1,165 @@
+<div class="container-fluid mt-4">
+
+  <div class="row mb-3">
+    <div class="col">
+      <button mat-button (click)="volver()">
+        <mat-icon>arrow_back</mat-icon> Volver al listado
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="cargando" class="text-center mt-5">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <div *ngIf="!cargando">
+
+    <!-- Header -->
+    <mat-card class="mb-3">
+      <mat-card-content>
+        <div class="row align-items-center">
+          <div class="col">
+            <h2 class="mb-0">{{ programacion.destino_rp }}</h2>
+            <p class="text-muted mb-0">Programación #{{ programacion.id }}</p>
+          </div>
+          <div class="col-auto">
+            <span class="badge-estado">{{ getEstado(programacion.id_estado) }}</span>
+          </div>
+          <div class="col-auto" *ngIf="programacion.id_estado === 1">
+            <button mat-raised-button color="primary" (click)="enviarACoordinador()">
+              <mat-icon>send</mat-icon> Enviar a coordinador
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Datos básicos -->
+    <mat-card class="mb-3">
+      <mat-card-title>Datos básicos</mat-card-title>
+      <mat-card-content>
+        <div class="row mt-3">
+          <div class="col-md-3">
+            <p class="label">Año periodo</p>
+            <p class="valor">{{ programacion.anio_periodo }}</p>
+          </div>
+          <div class="col-md-3">
+            <p class="label">Estudiantes aprox.</p>
+            <p class="valor">{{ programacion.num_estudiantes_aprox }}</p>
+          </div>
+          <div class="col-md-3">
+            <p class="label">Cantidad de grupos</p>
+            <p class="valor">{{ programacion.cantidad_grupos }}</p>
+          </div>
+          <div class="col-md-3">
+            <p class="label">Grupos</p>
+            <p class="valor">
+              {{ programacion.grupo_1 }}
+              <span *ngIf="programacion.grupo_2">, {{ programacion.grupo_2 }}</span>
+              <span *ngIf="programacion.grupo_3">, {{ programacion.grupo_3 }}</span>
+              <span *ngIf="programacion.grupo_4">, {{ programacion.grupo_4 }}</span>
+            </p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Ruta principal -->
+    <mat-card class="mb-3">
+      <mat-card-title>Ruta principal</mat-card-title>
+      <mat-card-content>
+        <div class="row mt-3">
+          <div class="col-md-4">
+            <p class="label">Destino</p>
+            <p class="valor">{{ programacion.destino_rp }}</p>
+          </div>
+          <div class="col-md-4">
+            <p class="label">Lugar de salida</p>
+            <p class="valor">{{ programacion.lugar_salida_rp }}</p>
+          </div>
+          <div class="col-md-4">
+            <p class="label">Lugar de regreso</p>
+            <p class="valor">{{ programacion.lugar_regreso_rp }}</p>
+          </div>
+          <div class="col-md-3">
+            <p class="label">Fecha salida aprox.</p>
+            <p class="valor">{{ programacion.fecha_salida_aprox_rp }}</p>
+          </div>
+          <div class="col-md-3">
+            <p class="label">Fecha regreso aprox.</p>
+            <p class="valor">{{ programacion.fecha_regreso_aprox_rp }}</p>
+          </div>
+          <div class="col-md-3">
+            <p class="label">Duración (días)</p>
+            <p class="valor">{{ programacion.duracion_num_dias_rp }}</p>
+          </div>
+          <div class="col-md-3" *ngIf="programacion.ruta_principal">
+            <p class="label">Ver en mapa</p>
+            <a [href]="programacion.ruta_principal" target="_blank" mat-stroked-button>
+              <mat-icon>map</mat-icon> Abrir mapa
+            </a>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Ruta alterna -->
+    <mat-card class="mb-3" *ngIf="programacion.destino_ra">
+      <mat-card-title>Ruta alterna</mat-card-title>
+      <mat-card-content>
+        <div class="row mt-3">
+          <div class="col-md-4">
+            <p class="label">Destino</p>
+            <p class="valor">{{ programacion.destino_ra }}</p>
+          </div>
+          <div class="col-md-3">
+            <p class="label">Fecha salida aprox.</p>
+            <p class="valor">{{ programacion.fecha_salida_aprox_ra }}</p>
+          </div>
+          <div class="col-md-3">
+            <p class="label">Fecha regreso aprox.</p>
+            <p class="valor">{{ programacion.fecha_regreso_aprox_ra }}</p>
+          </div>
+          <div class="col-md-2">
+            <p class="label">Duración (días)</p>
+            <p class="valor">{{ programacion.duracion_num_dias_ra }}</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Aprobaciones -->
+    <mat-card class="mb-3">
+      <mat-card-title>Estado de aprobaciones</mat-card-title>
+      <mat-card-content>
+        <div class="row mt-3">
+          <div class="col-md-4">
+            <p class="label">Coordinador</p>
+            <span class="badge-aprobacion"
+              [class.pendiente]="programacion.aprobacion_coordinador === 0"
+              [class.aprobado]="programacion.aprobacion_coordinador === 1"
+              [class.rechazado]="programacion.aprobacion_coordinador === 2">
+              {{ programacion.aprobacion_coordinador === 0 ? 'Pendiente' :
+                 programacion.aprobacion_coordinador === 1 ? 'Aprobado' : 'Rechazado' }}
+            </span>
+          </div>
+          <div class="col-md-4">
+            <p class="label">Decano</p>
+            <span class="badge-aprobacion"
+              [class.pendiente]="programacion.aprobacion_decano === 0"
+              [class.aprobado]="programacion.aprobacion_decano === 1"
+              [class.rechazado]="programacion.aprobacion_decano === 2">
+              {{ programacion.aprobacion_decano === 0 ? 'Pendiente' :
+                 programacion.aprobacion_decano === 1 ? 'Aprobado' : 'Rechazado' }}
+            </span>
+          </div>
+          <div class="col-md-4">
+            <p class="label">Fecha diligenciamiento</p>
+            <p class="valor">{{ programacion.fecha_diligenciamiento }}</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+</div>

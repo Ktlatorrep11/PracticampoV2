@@ -34,4 +34,9 @@ export class ListadoComponent implements OnInit {
     this.router.navigate(['/pages/programaciones/crear']);
   }
 
+  verDetalle(id: number): void {
+  this.router.navigate(['/pages/programaciones', id]);
+  }
+  
+
 }
