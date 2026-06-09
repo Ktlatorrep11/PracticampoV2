@@ -1,0 +1,333 @@
+<div class="container-fluid mt-4">
+
+  <!-- Header -->
+  <div class="row mb-3">
+    <div class="col">
+      <h2>Nueva Programación de Práctica de Campo</h2>
+      <p class="text-muted">Paso {{ paso }} de {{ totalPasos }}</p>
+    </div>
+    <div class="col-auto">
+      <button mat-button (click)="cancelar()">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Indicador de pasos -->
+  <mat-card class="mb-3 p-2">
+    <div class="stepper-indicador">
+      <span *ngFor="let p of [1,2,3,4,5,6,7]"
+        [class.activo]="p === paso"
+        [class.completado]="p < paso">
+        {{ p }}
+      </span>
+    </div>
+  </mat-card>
+
+  <form [formGroup]="form">
+
+    <!-- PASO 1 — Datos básicos -->
+    <mat-card *ngIf="paso === 1" class="mb-3">
+      <mat-card-title>Datos básicos</mat-card-title>
+      <mat-card-content>
+        <div class="row mt-3">
+
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Espacio académico *</mat-label>
+              <mat-select formControlName="id_espacio_academico">
+                <mat-option [value]="1">Ecología</mat-option>
+                <mat-option [value]="2">Botánica</mat-option>
+                <mat-option [value]="3">Zoología</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Programa académico *</mat-label>
+              <mat-select formControlName="id_programa_academico">
+                <mat-option [value]="1">Ingeniería Forestal</mat-option>
+                <mat-option [value]="2">Administración Ambiental</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Año periodo *</mat-label>
+              <input matInput formControlName="anio_periodo" placeholder="2026">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Semestre *</mat-label>
+              <mat-select formControlName="id_semestre_asignatura">
+                <mat-option [value]="1">Primer semestre</mat-option>
+                <mat-option [value]="2">Segundo semestre</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Número de estudiantes aprox. *</mat-label>
+              <input matInput type="number" formControlName="num_estudiantes_aprox">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Cantidad de grupos *</mat-label>
+              <mat-select formControlName="cantidad_grupos">
+                <mat-option *ngFor="let g of cantidadGrupos" [value]="g">{{ g }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4" *ngIf="form.get('cantidad_grupos').value >= 1">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Grupo 1 *</mat-label>
+              <input matInput formControlName="grupo_1">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4" *ngIf="form.get('cantidad_grupos').value >= 2">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Grupo 2</mat-label>
+              <input matInput formControlName="grupo_2">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4" *ngIf="form.get('cantidad_grupos').value >= 3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Grupo 3</mat-label>
+              <input matInput formControlName="grupo_3">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4" *ngIf="form.get('cantidad_grupos').value >= 4">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Grupo 4</mat-label>
+              <input matInput formControlName="grupo_4">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Tipo de vinculación del docente *</mat-label>
+              <mat-select formControlName="id_tipo_vinculacion">
+                <mat-option *ngFor="let t of tiposVinculacion" [value]="t.id">{{ t.nombre }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <!-- Alerta vinculación especial -->
+          <div class="col-12" *ngIf="esVinculacionEspecial">
+            <mat-card class="alerta-info">
+              <mat-icon>info</mat-icon>
+              El docente es de vinculación especial. Debe buscar acompañamiento de un docente de planta antes de continuar.
+            </mat-card>
+          </div>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- PASO 2 — Ruta principal -->
+    <mat-card *ngIf="paso === 2" class="mb-3">
+      <mat-card-title>Ruta principal</mat-card-title>
+      <mat-card-content>
+        <div class="row mt-3">
+
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Destino *</mat-label>
+              <input matInput formControlName="destino_rp">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Lugar de salida *</mat-label>
+              <input matInput formControlName="lugar_salida_rp">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Lugar de regreso *</mat-label>
+              <input matInput formControlName="lugar_regreso_rp">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Fecha de salida aprox. *</mat-label>
+              <input matInput type="date" formControlName="fecha_salida_aprox_rp">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Fecha de regreso aprox. *</mat-label>
+              <input matInput type="date" formControlName="fecha_regreso_aprox_rp">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Duración (días) *</mat-label>
+              <input matInput type="number" formControlName="duracion_num_dias_rp">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-9">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>URL del mapa (Google Maps)</mat-label>
+              <input matInput formControlName="ruta_principal" placeholder="https://maps.google.com/...">
+            </mat-form-field>
+          </div>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- PASO 3 — Ruta alterna -->
+    <mat-card *ngIf="paso === 3" class="mb-3">
+      <mat-card-title>Ruta alterna</mat-card-title>
+      <mat-card-content>
+        <div class="row mt-3">
+
+          <div class="col-12 mb-3">
+            <p class="text-muted">La ruta alterna es opcional. Se usa en caso de que la ruta principal no sea viable.</p>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Destino alterno</mat-label>
+              <input matInput formControlName="destino_ra">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Fecha de salida aprox.</mat-label>
+              <input matInput type="date" formControlName="fecha_salida_aprox_ra">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Fecha de regreso aprox.</mat-label>
+              <input matInput type="date" formControlName="fecha_regreso_aprox_ra">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Duración (días)</mat-label>
+              <input matInput type="number" formControlName="duracion_num_dias_ra">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-9">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>URL del mapa (Google Maps)</mat-label>
+              <input matInput formControlName="ruta_alterna" placeholder="https://maps.google.com/...">
+            </mat-form-field>
+          </div>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- PASO 4 — Docentes -->
+    <mat-card *ngIf="paso === 4" class="mb-3">
+      <mat-card-title>Docentes</mat-card-title>
+      <mat-card-content>
+        <div class="row mt-3">
+
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Docente responsable *</mat-label>
+              <mat-select formControlName="id_docente_responsable">
+                <mat-option [value]="1">Juan Pérez</mat-option>
+                <mat-option [value]="2">María Rodríguez</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Docente de apoyo</mat-label>
+              <mat-select formControlName="id_docente_apoyo">
+                <mat-option [value]="null">Ninguno</mat-option>
+                <mat-option [value]="1">Juan Pérez</mat-option>
+                <mat-option [value]="2">María Rodríguez</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- PASO 5 — Materiales -->
+    <mat-card *ngIf="paso === 5" class="mb-3">
+      <mat-card-title>Materiales y herramientas</mat-card-title>
+      <mat-card-content>
+        <div class="row mt-3">
+          <div class="col-12">
+            <p class="text-muted">Listado de materiales y herramientas necesarios para la práctica.</p>
+            <p class="text-muted">(Esta sección se completará en la siguiente iteración)</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- PASO 6 — Riesgos -->
+    <mat-card *ngIf="paso === 6" class="mb-3">
+      <mat-card-title>Riesgos y amenazas</mat-card-title>
+      <mat-card-content>
+        <div class="row mt-3">
+          <div class="col-12">
+            <p class="text-muted">Identificación de riesgos y amenazas de la práctica.</p>
+            <p class="text-muted">(Esta sección se completará en la siguiente iteración)</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- PASO 7 — Presupuesto -->
+    <mat-card *ngIf="paso === 7" class="mb-3">
+      <mat-card-title>Presupuesto estimado</mat-card-title>
+      <mat-card-content>
+        <div class="row mt-3">
+          <div class="col-12">
+            <p class="text-muted">Estimación del presupuesto requerido para la práctica.</p>
+            <p class="text-muted">(Esta sección se completará en la siguiente iteración)</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+  </form>
+
+  <!-- Botones de navegación -->
+  <div class="row mt-3 mb-5">
+    <div class="col">
+      <button mat-stroked-button *ngIf="paso > 1" (click)="anterior()">
+        <mat-icon>arrow_back</mat-icon> Anterior
+      </button>
+    </div>
+    <div class="col-auto">
+      <button mat-raised-button color="primary" *ngIf="paso < totalPasos" (click)="siguiente()">
+        Siguiente <mat-icon>arrow_forward</mat-icon>
+      </button>
+      <button mat-raised-button color="primary" *ngIf="paso === totalPasos" (click)="guardar()">
+        <mat-icon>save</mat-icon> Guardar programación
+      </button>
+    </div>
+  </div>
+
+</div>

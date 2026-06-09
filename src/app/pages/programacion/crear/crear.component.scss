@@ -1,0 +1,42 @@
+.stepper-indicador {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+
+  span {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e0e0e0;
+    color: #555;
+    font-weight: 500;
+    font-size: 14px;
+
+    &.activo {
+      background-color: #2E5FA3;
+      color: white;
+    }
+
+    &.completado {
+      background-color: #1B5E20;
+      color: white;
+    }
+  }
+}
+
+.alerta-info {
+  background-color: #FFF8E1;
+  border-left: 4px solid #7B5800;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #7B5800;
+}
+
+mat-form-field {
+  margin-bottom: 8px;
+}

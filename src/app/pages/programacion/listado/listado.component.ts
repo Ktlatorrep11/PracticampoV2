@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Programacion, ESTADOS_PROGRAMACION } from '../../../shared/models';
 import { ProgramacionService } from '../services/programacion.service';
 
@@ -13,7 +14,10 @@ export class ListadoComponent implements OnInit {
   estados = ESTADOS_PROGRAMACION;
   cargando = true;
 
-  constructor(private programacionService: ProgramacionService) {}
+  constructor(
+    private programacionService: ProgramacionService,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.programacionService.getAll().subscribe(data => {
@@ -24,6 +28,10 @@ export class ListadoComponent implements OnInit {
 
   getEstado(id: number): string {
     return this.estados[id] || 'Desconocido';
+  }
+
+  nueva(): void {
+    this.router.navigate(['/pages/programaciones/crear']);
   }
 
 }
