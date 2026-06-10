@@ -25,12 +25,44 @@
           <div class="col-auto">
             <span class="badge-estado">{{ getEstado(programacion.id_estado) }}</span>
           </div>
+        </div>
+
+        <!-- Acciones según estado -->
+        <div class="row mt-3">
           <div class="col-auto" *ngIf="programacion.id_estado === 1">
-            <button mat-raised-button color="primary" (click)="enviarACoordinador()">
+            <button mat-raised-button color="primary"
+              (click)="enviarACoordinador()" [disabled]="procesando">
               <mat-icon>send</mat-icon> Enviar a coordinador
             </button>
           </div>
+
+          <div class="col-auto" *ngIf="programacion.id_estado === 2">
+            <button mat-raised-button color="primary"
+              (click)="aprobarCoordinador()" [disabled]="procesando" class="mr-2">
+              <mat-icon>check_circle</mat-icon> Aprobar
+            </button>
+            <button mat-raised-button color="warn"
+              (click)="rechazarCoordinador()" [disabled]="procesando">
+              <mat-icon>cancel</mat-icon> Rechazar
+            </button>
+          </div>
+
+          <div class="col-auto" *ngIf="programacion.id_estado === 3">
+            <button mat-raised-button color="primary"
+              (click)="aprobarDecano()" [disabled]="procesando" class="mr-2">
+              <mat-icon>verified</mat-icon> Visto bueno decano
+            </button>
+            <button mat-raised-button color="warn"
+              (click)="rechazarDecano()" [disabled]="procesando">
+              <mat-icon>cancel</mat-icon> Rechazar
+            </button>
+          </div>
+
+          <div class="col-auto" *ngIf="procesando">
+            <mat-spinner diameter="30"></mat-spinner>
+          </div>
         </div>
+
       </mat-card-content>
     </mat-card>
 

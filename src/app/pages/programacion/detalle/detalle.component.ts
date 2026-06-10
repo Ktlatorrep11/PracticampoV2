@@ -10,9 +10,10 @@ import { ProgramacionService } from '../services/programacion.service';
 })
 export class DetalleComponent implements OnInit {
 
-  programacion!: Programacion
+  programacion!: Programacion;
   estados = ESTADOS_PROGRAMACION;
   cargando = true;
+  procesando = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -37,7 +38,43 @@ export class DetalleComponent implements OnInit {
   }
 
   enviarACoordinador(): void {
-    console.log('Enviando a coordinador...');
+    this.procesando = true;
+    this.programacionService.enviarACoordinador(this.programacion.id).subscribe(data => {
+      this.programacion = data;
+      this.procesando = false;
+    });
+  }
+
+  aprobarCoordinador(): void {
+    this.procesando = true;
+    this.programacionService.aprobarCoordinador(this.programacion.id).subscribe(data => {
+      this.programacion = data;
+      this.procesando = false;
+    });
+  }
+
+  rechazarCoordinador(): void {
+    this.procesando = true;
+    this.programacionService.rechazarCoordinador(this.programacion.id).subscribe(data => {
+      this.programacion = data;
+      this.procesando = false;
+    });
+  }
+
+  aprobarDecano(): void {
+    this.procesando = true;
+    this.programacionService.aprobarDecano(this.programacion.id).subscribe(data => {
+      this.programacion = data;
+      this.procesando = false;
+    });
+  }
+
+  rechazarDecano(): void {
+    this.procesando = true;
+    this.programacionService.rechazarDecano(this.programacion.id).subscribe(data => {
+      this.programacion = data;
+      this.procesando = false;
+    });
   }
 
 }
