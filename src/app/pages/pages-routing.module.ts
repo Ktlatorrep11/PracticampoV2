@@ -19,6 +19,11 @@ const routes: Routes = [{
         .then(m => m.ProgramacionModule),
     },
     {
+      path: 'solicitudes',
+      loadChildren: () => import('./solicitud/solicitud.module')
+        .then(m => m.SolicitudModule),
+    },
+    {
       path: '', redirectTo: 'dashboard', pathMatch: 'full',
     },
   ]
