@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { Programacion, ESTADOS_PROGRAMACION } from '../../../shared/models';
 import { ProgramacionService } from '../services/programacion.service';
+import { DialogoRechazoComponent } from '../dialogo-rechazo/dialogo-rechazo.component';
 
 @Component({
   selector: 'app-detalle-programacion',
@@ -19,6 +21,7 @@ export class DetalleComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private programacionService: ProgramacionService,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
@@ -54,10 +57,15 @@ export class DetalleComponent implements OnInit {
   }
 
   rechazarCoordinador(): void {
-    this.procesando = true;
-    this.programacionService.rechazarCoordinador(this.programacion.id).subscribe(data => {
-      this.programacion = data;
-      this.procesando = false;
+    const dialogRef = this.dialog.open(DialogoRechazoComponent, { width: '500px' });
+    dialogRef.afterClosed().subscribe(observacion => {
+      if (observacion) {
+        this.procesando = true;
+        this.programacionService.rechazarCoordinador(this.programacion.id, observacion).subscribe(data => {
+          this.programacion = data;
+          this.procesando = false;
+        });
+      }
     });
   }
 
@@ -70,10 +78,15 @@ export class DetalleComponent implements OnInit {
   }
 
   rechazarDecano(): void {
-    this.procesando = true;
-    this.programacionService.rechazarDecano(this.programacion.id).subscribe(data => {
-      this.programacion = data;
-      this.procesando = false;
+    const dialogRef = this.dialog.open(DialogoRechazoComponent, { width: '500px' });
+    dialogRef.afterClosed().subscribe(observacion => {
+      if (observacion) {
+        this.procesando = true;
+        this.programacionService.rechazarDecano(this.programacion.id, observacion).subscribe(data => {
+          this.programacion = data;
+          this.procesando = false;
+        });
+      }
     });
   }
 
