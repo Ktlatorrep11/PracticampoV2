@@ -11,78 +11,79 @@
 
   <form [formGroup]="form">
 
+    <!-- Búsqueda en SGA -->
     <mat-card class="mb-3">
-      <mat-card-title>Información personal</mat-card-title>
+      <mat-card-title>Buscar en el SGA</mat-card-title>
       <mat-card-content>
-        <div class="row mt-3">
-
-          <div class="col-md-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Primer nombre *</mat-label>
-              <input matInput formControlName="primer_nombre">
-            </mat-form-field>
-          </div>
-
-          <div class="col-md-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Segundo nombre</mat-label>
-              <input matInput formControlName="segundo_nombre">
-            </mat-form-field>
-          </div>
-
-          <div class="col-md-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Primer apellido *</mat-label>
-              <input matInput formControlName="primer_apellido">
-            </mat-form-field>
-          </div>
-
-          <div class="col-md-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Segundo apellido</mat-label>
-              <input matInput formControlName="segundo_apellido">
-            </mat-form-field>
-          </div>
+        <p class="text-muted mt-2">Ingresa el número de cédula del funcionario para cargar sus datos desde el Sistema de Gestión Académica.</p>
+        <div class="row mt-3 align-items-center">
 
           <div class="col-md-4">
             <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Teléfono</mat-label>
-              <input matInput formControlName="telefono">
+              <mat-label>Número de cédula *</mat-label>
+              <input matInput formControlName="num_identificacion"
+                placeholder="ej: 80123456">
             </mat-form-field>
           </div>
 
-          <div class="col-md-4">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Celular</mat-label>
-              <input matInput formControlName="celular">
-            </mat-form-field>
+          <div class="col-auto">
+            <button mat-raised-button color="primary"
+              (click)="buscarEnSGA()" [disabled]="buscando || !form.get('num_identificacion')?.value">
+              <mat-icon>search</mat-icon>
+              {{ buscando ? 'Buscando...' : 'Buscar en SGA' }}
+            </button>
+          </div>
+
+          <div class="col-auto" *ngIf="buscando">
+            <mat-spinner diameter="30"></mat-spinner>
           </div>
 
         </div>
+
+        <!-- No encontrado -->
+        <div class="alerta-error mt-2" *ngIf="noEncontrado">
+          <mat-icon>error</mat-icon>
+          No se encontró ningún funcionario con esa cédula en el SGA.
+        </div>
+
+        <!-- Datos encontrados -->
+        <div class="datos-sga mt-3" *ngIf="datosSGA">
+          <div class="row">
+            <div class="col-md-3">
+              <p class="label">Nombre completo</p>
+              <p class="valor">{{ datosSGA.primer_nombre }} {{ datosSGA.segundo_nombre }} {{ datosSGA.primer_apellido }} {{ datosSGA.segundo_apellido }}</p>
+            </div>
+            <div class="col-md-3">
+              <p class="label">Correo institucional</p>
+              <p class="valor">{{ datosSGA.email }}</p>
+            </div>
+            <div class="col-md-3">
+              <p class="label">Cargo en el SGA</p>
+              <p class="valor">{{ datosSGA.cargo }}</p>
+            </div>
+            <div class="col-md-3">
+              <p class="label">Facultad</p>
+              <p class="valor">{{ datosSGA.facultad }}</p>
+            </div>
+            <div class="col-md-3">
+              <p class="label">Tipo de vinculación</p>
+              <p class="valor">{{ datosSGA.tipo_vinculacion }}</p>
+            </div>
+            <div class="col-md-3">
+              <p class="label">Celular</p>
+              <p class="valor">{{ datosSGA.celular }}</p>
+            </div>
+          </div>
+        </div>
+
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="mb-3">
-      <mat-card-title>Información del sistema</mat-card-title>
+    <!-- Asignación de rol -->
+    <mat-card class="mb-3" *ngIf="datosSGA">
+      <mat-card-title>Asignar rol en PractiCampoUD</mat-card-title>
       <mat-card-content>
         <div class="row mt-3">
-
-          <div class="col-md-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Usuario *</mat-label>
-              <input matInput formControlName="usuario"
-                placeholder="ej: jperez">
-            </mat-form-field>
-          </div>
-
-          <div class="col-md-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Correo electrónico *</mat-label>
-              <input matInput formControlName="email" type="email"
-                placeholder="usuario@udistrital.edu.co">
-            </mat-form-field>
-          </div>
-
           <div class="col-md-6">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Rol *</mat-label>
@@ -93,23 +94,11 @@
               </mat-select>
             </mat-form-field>
           </div>
-
-          <div class="col-md-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Tipo de vinculación *</mat-label>
-              <mat-select formControlName="id_tipo_vinculacion">
-                <mat-option *ngFor="let t of tiposVinculacion" [value]="t.id">
-                  {{ t.nombre }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-
         </div>
       </mat-card-content>
     </mat-card>
 
-    <div class="row mt-3 mb-5">
+    <div class="row mt-3 mb-5" *ngIf="datosSGA">
       <div class="col-auto">
         <button mat-raised-button color="primary"
           (click)="guardar()" [disabled]="form.invalid">
