@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Usuario } from '../../../shared/models';
+import { UsuarioService } from '../../usuarios/services/usuario.service';
 
 @Component({
   selector: 'app-crear-programacion',
@@ -12,6 +14,7 @@ export class CrearComponent implements OnInit {
   form!: FormGroup;
   paso = 1;
   totalPasos = 7;
+  docentes: Usuario[] = [];
 
   cantidadGrupos = [1, 2, 3, 4];
   tiposVinculacion = [
@@ -23,11 +26,15 @@ export class CrearComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
+    private usuarioService: UsuarioService,
   ) {}
 
   ngOnInit(): void {
+    this.usuarioService.getDocentes().subscribe(data => {
+      this.docentes = data;
+    });
+
     this.form = this.fb.group({
-      // Paso 1 — Datos básicos
       id_espacio_academico:     [null, Validators.required],
       id_programa_academico:    [null, Validators.required],
       anio_periodo:             ['', Validators.required],
@@ -39,7 +46,6 @@ export class CrearComponent implements OnInit {
       grupo_4:                  [''],
       num_estudiantes_aprox:    [null, [Validators.required, Validators.min(1)]],
       id_tipo_vinculacion:      [null, Validators.required],
-      // Paso 2 — Ruta principal
       destino_rp:               ['', Validators.required],
       lugar_salida_rp:          ['', Validators.required],
       lugar_regreso_rp:         ['', Validators.required],
@@ -47,23 +53,22 @@ export class CrearComponent implements OnInit {
       fecha_regreso_aprox_rp:   ['', Validators.required],
       duracion_num_dias_rp:     [null, [Validators.required, Validators.min(1)]],
       ruta_principal:           [''],
-      // Paso 3 — Ruta alterna
       destino_ra:               [''],
       fecha_salida_aprox_ra:    [''],
       fecha_regreso_aprox_ra:   [''],
       duracion_num_dias_ra:     [null],
       ruta_alterna:             [''],
-      // Paso 4 — Docentes
       id_docente_responsable:   [null, Validators.required],
       id_docente_apoyo:         [null],
-      // Paso 5 — Materiales (se manejan aparte)
-      // Paso 6 — Riesgos (se manejan aparte)
-      // Paso 7 — Presupuesto (se maneja aparte)
     });
   }
 
   get esVinculacionEspecial(): boolean {
     return this.form.get('id_tipo_vinculacion')?.value === 2;
+  }
+
+  getNombreDocente(u: Usuario): string {
+    return `${u.primer_nombre} ${u.primer_apellido}`;
   }
 
   siguiente(): void {

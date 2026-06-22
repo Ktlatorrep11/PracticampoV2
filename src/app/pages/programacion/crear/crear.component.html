@@ -251,8 +251,9 @@
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Docente responsable *</mat-label>
               <mat-select formControlName="id_docente_responsable">
-                <mat-option [value]="1">Juan Pérez</mat-option>
-                <mat-option [value]="2">María Rodríguez</mat-option>
+                <mat-option *ngFor="let d of docentes" [value]="d.id">
+                  {{ getNombreDocente(d) }}
+                </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -262,8 +263,9 @@
               <mat-label>Docente de apoyo</mat-label>
               <mat-select formControlName="id_docente_apoyo">
                 <mat-option [value]="null">Ninguno</mat-option>
-                <mat-option [value]="1">Juan Pérez</mat-option>
-                <mat-option [value]="2">María Rodríguez</mat-option>
+                <mat-option *ngFor="let d of docentes" [value]="d.id">
+                  {{ getNombreDocente(d) }}
+                </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
