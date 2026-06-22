@@ -12,14 +12,20 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ListadoSolicitudComponent } from './listado/listado.component';
+import { DetalleSolicitudComponent } from './detalle/detalle.component';
+import { CrearSolicitudComponent } from './crear/crear.component';
 
 const routes: Routes = [
   { path: '', component: ListadoSolicitudComponent },
+  { path: 'crear', component: CrearSolicitudComponent },
+  { path: ':id', component: DetalleSolicitudComponent },
 ];
 
 @NgModule({
   declarations: [
     ListadoSolicitudComponent,
+    DetalleSolicitudComponent,
+    CrearSolicitudComponent,
   ],
   imports: [
     CommonModule,
