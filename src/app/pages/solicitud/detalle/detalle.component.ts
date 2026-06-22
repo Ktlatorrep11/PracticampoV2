@@ -98,4 +98,8 @@ export class DetalleSolicitudComponent implements OnInit {
     });
   }
 
+  verEstudiantes(): void {
+    this.router.navigate(['/pages/estudiantes', this.solicitud.id]);
+  }
+
 }
