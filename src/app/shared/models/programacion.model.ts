@@ -31,6 +31,7 @@ export interface Programacion {
   aprobacion_coordinador: number;
   aprobacion_decano: number;
   fecha_diligenciamiento: string;
+  observacion_rechazo?: string;
 }
 
 export const ESTADOS_PROGRAMACION: { [key: number]: string } = {
