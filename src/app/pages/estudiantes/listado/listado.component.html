@@ -5,6 +5,9 @@
       <h2>Estudiantes — Solicitud #{{ idSolicitud }}</h2>
     </div>
     <div class="col-auto">
+      <button mat-raised-button color="primary" (click)="inscribir()" class="mr-2">
+        <mat-icon>person_add</mat-icon> Inscribir estudiante
+      </button>
       <button mat-button (click)="volver()">
         <mat-icon>arrow_back</mat-icon> Volver a la solicitud
       </button>

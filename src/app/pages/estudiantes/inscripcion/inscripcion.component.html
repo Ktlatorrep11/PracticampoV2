@@ -1,0 +1,127 @@
+<div class="container-fluid mt-4">
+
+  <div class="row mb-3">
+    <div class="col">
+      <h2>Inscribir estudiante — Solicitud #{{ idSolicitud }}</h2>
+    </div>
+    <div class="col-auto">
+      <button mat-button (click)="cancelar()">Cancelar</button>
+    </div>
+  </div>
+
+  <form [formGroup]="form">
+
+    <!-- Búsqueda en SGA -->
+    <mat-card class="mb-3">
+      <mat-card-title>Buscar estudiante en el SGA</mat-card-title>
+      <mat-card-content>
+        <p class="text-muted mt-2">Ingresa el código estudiantil o número de cédula para validar la matrícula activa.</p>
+        <div class="row mt-3 align-items-center">
+
+          <div class="col-md-4">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Código o cédula *</mat-label>
+              <input matInput formControlName="codigo"
+                placeholder="ej: 20191025034">
+            </mat-form-field>
+          </div>
+
+          <div class="col-auto">
+            <button mat-raised-button color="primary"
+              (click)="buscarEnSGA()" [disabled]="buscando || !form.get('codigo')?.value">
+              <mat-icon>search</mat-icon>
+              {{ buscando ? 'Buscando...' : 'Buscar en SGA' }}
+            </button>
+          </div>
+
+          <div class="col-auto" *ngIf="buscando">
+            <mat-spinner diameter="30"></mat-spinner>
+          </div>
+
+        </div>
+
+        <!-- No encontrado -->
+        <div class="alerta-error mt-2" *ngIf="noEncontrado">
+          <mat-icon>error</mat-icon>
+          No se encontró ningún estudiante con ese código o cédula en el SGA.
+        </div>
+
+        <!-- Sin matrícula activa -->
+        <div class="alerta-error mt-2" *ngIf="sinMatricula">
+          <mat-icon>warning</mat-icon>
+          El estudiante no tiene matrícula activa para el período actual. No puede inscribirse.
+        </div>
+
+        <!-- Datos encontrados -->
+        <div class="datos-sga mt-3" *ngIf="estudianteSGA">
+          <div class="row">
+            <div class="col-md-4">
+              <p class="label">Nombre completo</p>
+              <p class="valor">{{ estudianteSGA.nombre_completo }}</p>
+            </div>
+            <div class="col-md-4">
+              <p class="label">Código estudiantil</p>
+              <p class="valor">{{ estudianteSGA.codigo }}</p>
+            </div>
+            <div class="col-md-4">
+              <p class="label">Programa académico</p>
+              <p class="valor">{{ estudianteSGA.programa }}</p>
+            </div>
+            <div class="col-md-4">
+              <p class="label">Correo institucional</p>
+              <p class="valor">{{ estudianteSGA.email }}</p>
+            </div>
+            <div class="col-md-4">
+              <p class="label">Matrícula activa</p>
+              <p class="valor activa">✓ Verificada</p>
+            </div>
+          </div>
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Datos adicionales -->
+    <mat-card class="mb-3" *ngIf="estudianteSGA">
+      <mat-card-title>Datos adicionales</mat-card-title>
+      <mat-card-content>
+        <div class="row mt-3">
+
+          <div class="col-md-4">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Grupo *</mat-label>
+              <mat-select formControlName="grupo">
+                <mat-option *ngFor="let g of grupos" [value]="g">{{ g }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Celular</mat-label>
+              <input matInput formControlName="celular">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>EPS *</mat-label>
+              <input matInput formControlName="eps">
+            </mat-form-field>
+          </div>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <div class="row mt-3 mb-5" *ngIf="estudianteSGA">
+      <div class="col-auto">
+        <button mat-raised-button color="primary"
+          (click)="guardar()" [disabled]="form.invalid || guardando">
+          <mat-icon>person_add</mat-icon> Inscribir estudiante
+        </button>
+      </div>
+    </div>
+
+  </form>
+</div>

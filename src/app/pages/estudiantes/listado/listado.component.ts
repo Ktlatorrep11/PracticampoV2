@@ -56,4 +56,8 @@ export class ListadoEstudiantesComponent implements OnInit {
       });
   }
 
+  inscribir(): void {
+    this.router.navigate(['/pages/estudiantes', this.idSolicitud, 'inscribir']);
+  }
+
 }
