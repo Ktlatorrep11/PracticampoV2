@@ -1,0 +1,122 @@
+<div class="container-fluid mt-4">
+
+  <div class="row mb-3">
+    <div class="col">
+      <h2>Nuevo usuario</h2>
+    </div>
+    <div class="col-auto">
+      <button mat-button (click)="cancelar()">Cancelar</button>
+    </div>
+  </div>
+
+  <form [formGroup]="form">
+
+    <mat-card class="mb-3">
+      <mat-card-title>Información personal</mat-card-title>
+      <mat-card-content>
+        <div class="row mt-3">
+
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Primer nombre *</mat-label>
+              <input matInput formControlName="primer_nombre">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Segundo nombre</mat-label>
+              <input matInput formControlName="segundo_nombre">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Primer apellido *</mat-label>
+              <input matInput formControlName="primer_apellido">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Segundo apellido</mat-label>
+              <input matInput formControlName="segundo_apellido">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Teléfono</mat-label>
+              <input matInput formControlName="telefono">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Celular</mat-label>
+              <input matInput formControlName="celular">
+            </mat-form-field>
+          </div>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="mb-3">
+      <mat-card-title>Información del sistema</mat-card-title>
+      <mat-card-content>
+        <div class="row mt-3">
+
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Usuario *</mat-label>
+              <input matInput formControlName="usuario"
+                placeholder="ej: jperez">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Correo electrónico *</mat-label>
+              <input matInput formControlName="email" type="email"
+                placeholder="usuario@udistrital.edu.co">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Rol *</mat-label>
+              <mat-select formControlName="id_role">
+                <mat-option *ngFor="let r of rolesArray" [value]="r.id">
+                  {{ r.nombre }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Tipo de vinculación *</mat-label>
+              <mat-select formControlName="id_tipo_vinculacion">
+                <mat-option *ngFor="let t of tiposVinculacion" [value]="t.id">
+                  {{ t.nombre }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <div class="row mt-3 mb-5">
+      <div class="col-auto">
+        <button mat-raised-button color="primary"
+          (click)="guardar()" [disabled]="form.invalid">
+          <mat-icon>save</mat-icon> Guardar usuario
+        </button>
+      </div>
+    </div>
+
+  </form>
+</div>

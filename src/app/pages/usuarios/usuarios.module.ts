@@ -11,14 +11,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ListadoUsuariosComponent } from './listado/listado.component';
+import { CrearUsuarioComponent } from './crear/crear.component';
 
 const routes: Routes = [
   { path: '', component: ListadoUsuariosComponent },
+  { path: 'crear', component: CrearUsuarioComponent },
 ];
 
 @NgModule({
   declarations: [
     ListadoUsuariosComponent,
+    CrearUsuarioComponent,
   ],
   imports: [
     CommonModule,
