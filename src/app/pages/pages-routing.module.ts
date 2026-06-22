@@ -29,6 +29,11 @@ const routes: Routes = [{
         .then(m => m.UsuariosModule),
     },
     {
+      path: 'estudiantes',
+      loadChildren: () => import('./estudiantes/estudiantes.module')
+        .then(m => m.EstudiantesModule),
+    },
+    {
       path: '', redirectTo: 'dashboard', pathMatch: 'full',
     },
   ]

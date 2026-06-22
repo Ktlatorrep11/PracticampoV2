@@ -1,0 +1,75 @@
+<div class="container-fluid mt-4">
+
+  <div class="row mb-3">
+    <div class="col">
+      <h2>Estudiantes — Solicitud #{{ idSolicitud }}</h2>
+    </div>
+    <div class="col-auto">
+      <button mat-button (click)="volver()">
+        <mat-icon>arrow_back</mat-icon> Volver a la solicitud
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="cargando" class="text-center mt-5">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <div *ngIf="!cargando">
+
+    <mat-card *ngIf="estudiantes.length === 0" class="mb-3">
+      <mat-card-content>
+        <p class="text-muted text-center mt-3">No hay estudiantes inscritos en esta solicitud.</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card *ngFor="let e of estudiantes" class="mb-3">
+      <mat-card-content>
+        <div class="row align-items-center">
+          <div class="col">
+            <h3 class="mb-0">{{ e.nombre_completo }}</h3>
+            <p class="text-muted mb-0">
+              CC {{ e.num_identificacion }} · Grupo {{ e.grupo }} · {{ e.eps }}
+            </p>
+            <p class="text-muted mb-0">{{ e.email }} · {{ e.celular }}</p>
+          </div>
+          <div class="col-auto">
+            <div class="documentos-counter">
+              <span class="counter-num">{{ getDocumentosCompletos(e) }}</span>
+              <span class="counter-total">/9</span>
+            </div>
+            <p class="text-muted text-center" style="font-size:12px">documentos</p>
+          </div>
+          <div class="col-auto">
+            <span class="badge-habilitado" [class.habilitado]="e.habilitado"
+              [class.no-habilitado]="!e.habilitado">
+              {{ e.habilitado ? 'Habilitado' : 'No habilitado' }}
+            </span>
+          </div>
+          <div class="col-auto">
+            <button mat-stroked-button
+              [color]="e.habilitado ? 'warn' : 'primary'"
+              (click)="habilitar(e)">
+              {{ e.habilitado ? 'Deshabilitar' : 'Habilitar' }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Documentos -->
+        <div class="row mt-3">
+          <div class="col-12 mb-2">
+            <p class="label">Documentos cargados</p>
+          </div>
+          <div class="col-md-4" *ngFor="let doc of documentos">
+            <div class="documento-item" [class.cargado]="(e)[doc]">
+              <mat-icon>{{ (e)[doc] ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+              <span>{{ doc | replace:'_':' ' }}</span>
+            </div>
+          </div>
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+</div>
