@@ -6,6 +6,7 @@ import { ProgramacionService } from '../services/programacion.service';
 import { PresupuestoService } from '../../presupuesto/services/presupuesto.service';
 import { DialogoRechazoComponent } from '../dialogo-rechazo/dialogo-rechazo.component';
 import { DialogoPresupuestoComponent } from '../dialogo-presupuesto/dialogo-presupuesto.component';
+import { DialogoEjecucionComponent } from '../dialogo-ejecucion/dialogo-ejecucion.component';
 
 @Component({
   selector: 'app-detalle-programacion',
@@ -101,6 +102,51 @@ export class DetalleComponent implements OnInit {
           this.procesando = false;
         });
       }
+    });
+  }
+
+  iniciarEjecucion(): void {
+    const dialogRef = this.dialog.open(DialogoEjecucionComponent, { width: '500px' });
+    dialogRef.afterClosed().subscribe(resultado => {
+      if (resultado !== null && resultado !== undefined) {
+        this.procesando = true;
+        this.programacionService.iniciarEjecucion(
+          this.programacion.id,
+          resultado.requiereAvance,
+          resultado.requiereTransporte
+        ).subscribe(data => {
+          this.programacion = data;
+          this.procesando = false;
+        });
+      }
+    });
+  }
+
+  entregarInforme(): void {
+    this.procesando = true;
+    this.programacionService.entregarInforme(
+      this.programacion.id,
+      'Informe de actividades de la práctica de campo',
+      new Date().toISOString().split('T')[0]
+    ).subscribe(data => {
+      this.programacion = data;
+      this.procesando = false;
+    });
+  }
+
+  aprobarInformeCoordinador(): void {
+    this.procesando = true;
+    this.programacionService.aprobarInformeCoordinador(this.programacion.id).subscribe(data => {
+      this.programacion = data;
+      this.procesando = false;
+    });
+  }
+
+  legalizar(): void {
+    this.procesando = true;
+    this.programacionService.legalizar(this.programacion.id).subscribe(data => {
+      this.programacion = data;
+      this.procesando = false;
     });
   }
 
