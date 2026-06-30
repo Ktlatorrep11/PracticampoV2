@@ -34,6 +34,11 @@ const routes: Routes = [{
         .then(m => m.EstudiantesModule),
     },
     {
+      path: 'presupuesto',
+      loadChildren: () => import('./presupuesto/presupuesto.module')
+        .then(m => m.PresupuestoModule),
+    },
+    {
       path: '', redirectTo: 'dashboard', pathMatch: 'full',
     },
   ]
