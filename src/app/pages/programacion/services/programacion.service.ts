@@ -66,4 +66,46 @@ export class ProgramacionService {
     return this.cambiarEstado(id, 6, observacion);
   }
 
+  iniciarEjecucion(id: number, requiereAvance: boolean, requiereTransporte: boolean): Observable<Programacion> {
+    if (environment.useMocks) {
+      const index = this.programaciones.findIndex(p => p.id === id);
+      if (index !== -1) {
+        this.programaciones[index] = {
+          ...this.programaciones[index],
+          id_estado: 7,
+          requiere_avance: requiereAvance,
+          requiere_transporte: requiereTransporte,
+        };
+        return of(this.programaciones[index]);
+      }
+    }
+    return this.http.put<Programacion>(`${this.apiUrl}/programaciones/${id}/ejecucion`,
+      { requiere_avance: requiereAvance, requiere_transporte: requiereTransporte });
+  }
+
+  entregarInforme(id: number, informe: string, fechaReal: string): Observable<Programacion> {
+    if (environment.useMocks) {
+      const index = this.programaciones.findIndex(p => p.id === id);
+      if (index !== -1) {
+        this.programaciones[index] = {
+          ...this.programaciones[index],
+          id_estado: 8,
+          informe_actividades: informe,
+          fecha_ejecucion_real: fechaReal,
+        };
+        return of(this.programaciones[index]);
+      }
+    }
+    return this.http.put<Programacion>(`${this.apiUrl}/programaciones/${id}/informe`,
+      { informe_actividades: informe, fecha_ejecucion_real: fechaReal });
+  }
+
+  aprobarInformeCoordinador(id: number): Observable<Programacion> {
+    return this.cambiarEstado(id, 9);
+  }
+
+  legalizar(id: number): Observable<Programacion> {
+    return this.cambiarEstado(id, 10);
+  }
+
 }

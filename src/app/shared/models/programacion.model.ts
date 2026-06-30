@@ -32,6 +32,12 @@ export interface Programacion {
   aprobacion_decano: number;
   fecha_diligenciamiento: string;
   observacion_rechazo?: string;
+  // Ejecución
+  requiere_avance?: boolean;
+  requiere_transporte?: boolean;
+  informe_actividades?: string;
+  fecha_ejecucion_real?: string;
+  observaciones_ejecucion?: string;
 }
 
 export const ESTADOS_PROGRAMACION: { [key: number]: string } = {
@@ -42,7 +48,8 @@ export const ESTADOS_PROGRAMACION: { [key: number]: string } = {
   5:  'Aprobado decano',
   6:  'Rechazado decano',
   7:  'En ejecución',
-  8:  'Cerrado',
-  9:  'Legalizado',
-  10: 'Cancelado',
+  8:  'Informe entregado',
+  9:  'Informe aprobado coordinador',
+  10: 'Legalizado',
+  11: 'Cancelado',
 };

@@ -11,10 +11,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ListadoComponent } from './listado/listado.component';
 import { CrearComponent } from './crear/crear.component';
 import { DetalleComponent } from './detalle/detalle.component';
 import { DialogoRechazoComponent } from './dialogo-rechazo/dialogo-rechazo.component';
+import { DialogoPresupuestoComponent } from './dialogo-presupuesto/dialogo-presupuesto.component';
+import { DialogoEjecucionComponent } from './dialogo-ejecucion/dialogo-ejecucion.component';
 
 const routes: Routes = [
   { path: '', component: ListadoComponent },
@@ -28,6 +31,8 @@ const routes: Routes = [
     CrearComponent,
     DetalleComponent,
     DialogoRechazoComponent,
+    DialogoPresupuestoComponent,
+    DialogoEjecucionComponent,
   ],
   imports: [
     CommonModule,
@@ -43,6 +48,7 @@ const routes: Routes = [
     MatInputModule,
     MatSelectModule,
     MatDialogModule,
+    MatSlideToggleModule,
   ]
 })
 export class ProgramacionModule { }

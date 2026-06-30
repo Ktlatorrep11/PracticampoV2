@@ -1,0 +1,76 @@
+<div class="container-fluid mt-4">
+
+  <div class="row mb-3">
+    <div class="col">
+      <h2>Presupuesto de Prácticas de Campo</h2>
+      <p class="text-muted">Año {{ presupuestos[0]?.anio || '2026' }}</p>
+    </div>
+  </div>
+
+  <div *ngIf="cargando" class="text-center mt-5">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <div *ngIf="!cargando">
+
+    <!-- Resumen general -->
+    <div class="row mb-4">
+      <div class="col-md-4">
+        <mat-card class="indicador">
+          <mat-card-content>
+            <div class="indicador-numero">{{ totalAsignado | currency:'COP':'symbol-narrow':'1.0-0' }}</div>
+            <div class="indicador-label">Total asignado</div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="col-md-4">
+        <mat-card class="indicador ejecutado">
+          <mat-card-content>
+            <div class="indicador-numero">{{ totalEjecutado | currency:'COP':'symbol-narrow':'1.0-0' }}</div>
+            <div class="indicador-label">Total ejecutado</div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="col-md-4">
+        <mat-card class="indicador porcentaje">
+          <mat-card-content>
+            <div class="indicador-numero">{{ porcentajeEjecucion }}%</div>
+            <div class="indicador-label">Ejecución general</div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- Listado por programación -->
+    <mat-card *ngFor="let p of presupuestos" class="mb-3">
+      <mat-card-content>
+        <div class="row align-items-center">
+          <div class="col">
+            <h3 class="mb-0">{{ p.programacion?.destino_rp || 'Programación #' + p.id_programacion_practica }}</h3>
+            <p class="text-muted mb-0">Programación #{{ p.id_programacion_practica }}</p>
+          </div>
+          <div class="col-auto">
+            <p class="label">Asignado</p>
+            <p class="valor">{{ p.valor_total_asignado | currency:'COP':'symbol-narrow':'1.0-0' }}</p>
+          </div>
+          <div class="col-auto">
+            <p class="label">Ejecutado</p>
+            <p class="valor">{{ p.valor_total_ejecutado | currency:'COP':'symbol-narrow':'1.0-0' }}</p>
+          </div>
+          <div class="col-auto">
+            <p class="label">% Ejecución</p>
+            <p class="valor">{{ getPorcentajeFila(p) }}%</p>
+          </div>
+        </div>
+
+        <div class="barra-progreso mt-2">
+          <div class="barra-relleno" [style.width.%]="getPorcentajeFila(p)"></div>
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+</div>
