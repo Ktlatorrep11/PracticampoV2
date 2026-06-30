@@ -3,7 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Programacion, ESTADOS_PROGRAMACION } from '../../../shared/models';
 import { ProgramacionService } from '../services/programacion.service';
+import { PresupuestoService } from '../../presupuesto/services/presupuesto.service';
 import { DialogoRechazoComponent } from '../dialogo-rechazo/dialogo-rechazo.component';
+import { DialogoPresupuestoComponent } from '../dialogo-presupuesto/dialogo-presupuesto.component';
+import { DialogoEjecucionComponent } from '../dialogo-ejecucion/dialogo-ejecucion.component';
 
 @Component({
   selector: 'app-detalle-programacion',
@@ -21,6 +24,7 @@ export class DetalleComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private programacionService: ProgramacionService,
+    private presupuestoService: PresupuestoService,
     private dialog: MatDialog,
   ) {}
 
@@ -70,10 +74,21 @@ export class DetalleComponent implements OnInit {
   }
 
   aprobarDecano(): void {
-    this.procesando = true;
-    this.programacionService.aprobarDecano(this.programacion.id).subscribe(data => {
-      this.programacion = data;
-      this.procesando = false;
+    const dialogRef = this.dialog.open(DialogoPresupuestoComponent, { width: '500px' });
+    dialogRef.afterClosed().subscribe(valor => {
+      if (valor) {
+        this.procesando = true;
+        this.presupuestoService.asignarPresupuesto(
+          this.programacion.id,
+          this.programacion.id_programa_academico,
+          valor
+        ).subscribe(() => {
+          this.programacionService.aprobarDecano(this.programacion.id).subscribe(data => {
+            this.programacion = data;
+            this.procesando = false;
+          });
+        });
+      }
     });
   }
 
@@ -87,6 +102,51 @@ export class DetalleComponent implements OnInit {
           this.procesando = false;
         });
       }
+    });
+  }
+
+  iniciarEjecucion(): void {
+    const dialogRef = this.dialog.open(DialogoEjecucionComponent, { width: '500px' });
+    dialogRef.afterClosed().subscribe(resultado => {
+      if (resultado !== null && resultado !== undefined) {
+        this.procesando = true;
+        this.programacionService.iniciarEjecucion(
+          this.programacion.id,
+          resultado.requiereAvance,
+          resultado.requiereTransporte
+        ).subscribe(data => {
+          this.programacion = data;
+          this.procesando = false;
+        });
+      }
+    });
+  }
+
+  entregarInforme(): void {
+    this.procesando = true;
+    this.programacionService.entregarInforme(
+      this.programacion.id,
+      'Informe de actividades de la práctica de campo',
+      new Date().toISOString().split('T')[0]
+    ).subscribe(data => {
+      this.programacion = data;
+      this.procesando = false;
+    });
+  }
+
+  aprobarInformeCoordinador(): void {
+    this.procesando = true;
+    this.programacionService.aprobarInformeCoordinador(this.programacion.id).subscribe(data => {
+      this.programacion = data;
+      this.procesando = false;
+    });
+  }
+
+  legalizar(): void {
+    this.procesando = true;
+    this.programacionService.legalizar(this.programacion.id).subscribe(data => {
+      this.programacion = data;
+      this.procesando = false;
     });
   }
 

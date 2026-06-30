@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>Asignar presupuesto</h2>
+<mat-dialog-content>
+  <p class="text-muted">Ingrese el valor del presupuesto aprobado para esta práctica de campo.</p>
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Valor presupuesto (COP) *</mat-label>
+    <input matInput type="number" [(ngModel)]="valor" min="1"
+      placeholder="ej: 8500000">
+    <mat-hint>Ingrese el valor en pesos colombianos</mat-hint>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-raised-button color="primary"
+    (click)="confirmar()" [disabled]="!valor || valor <= 0">
+    <mat-icon>check_circle</mat-icon> Confirmar presupuesto
+  </button>
+</mat-dialog-actions>

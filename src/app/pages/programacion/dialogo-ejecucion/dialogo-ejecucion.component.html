@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>Iniciar ejecución de práctica</h2>
+<mat-dialog-content>
+  <p class="text-muted">Antes de iniciar la ejecución, confirme los siguientes aspectos:</p>
+
+  <div class="pregunta mt-3">
+    <mat-slide-toggle [(ngModel)]="requiereAvance">
+      ¿La práctica requiere avance económico?
+    </mat-slide-toggle>
+    <p class="hint" *ngIf="requiereAvance">
+      Se iniciará el proceso de solicitud de avance según el proceso GR-PR-012.
+    </p>
+  </div>
+
+  <div class="pregunta mt-3">
+    <mat-slide-toggle [(ngModel)]="requiereTransporte">
+      ¿La práctica requiere contratación de transporte?
+    </mat-slide-toggle>
+    <p class="hint" *ngIf="requiereTransporte">
+      Se iniciará el proceso de contratación según el proceso GC-PR-008.
+    </p>
+  </div>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="confirmar()">
+    <mat-icon>play_circle</mat-icon> Iniciar ejecución
+  </button>
+</mat-dialog-actions>
