@@ -15,6 +15,7 @@ import { ListadoComponent } from './listado/listado.component';
 import { CrearComponent } from './crear/crear.component';
 import { DetalleComponent } from './detalle/detalle.component';
 import { DialogoRechazoComponent } from './dialogo-rechazo/dialogo-rechazo.component';
+import { DialogoPresupuestoComponent } from './dialogo-presupuesto/dialogo-presupuesto.component';
 
 const routes: Routes = [
   { path: '', component: ListadoComponent },
@@ -28,6 +29,7 @@ const routes: Routes = [
     CrearComponent,
     DetalleComponent,
     DialogoRechazoComponent,
+    DialogoPresupuestoComponent,
   ],
   imports: [
     CommonModule,

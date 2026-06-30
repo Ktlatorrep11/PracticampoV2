@@ -3,7 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Programacion, ESTADOS_PROGRAMACION } from '../../../shared/models';
 import { ProgramacionService } from '../services/programacion.service';
+import { PresupuestoService } from '../../presupuesto/services/presupuesto.service';
 import { DialogoRechazoComponent } from '../dialogo-rechazo/dialogo-rechazo.component';
+import { DialogoPresupuestoComponent } from '../dialogo-presupuesto/dialogo-presupuesto.component';
 
 @Component({
   selector: 'app-detalle-programacion',
@@ -21,6 +23,7 @@ export class DetalleComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private programacionService: ProgramacionService,
+    private presupuestoService: PresupuestoService,
     private dialog: MatDialog,
   ) {}
 
@@ -70,10 +73,21 @@ export class DetalleComponent implements OnInit {
   }
 
   aprobarDecano(): void {
-    this.procesando = true;
-    this.programacionService.aprobarDecano(this.programacion.id).subscribe(data => {
-      this.programacion = data;
-      this.procesando = false;
+    const dialogRef = this.dialog.open(DialogoPresupuestoComponent, { width: '500px' });
+    dialogRef.afterClosed().subscribe(valor => {
+      if (valor) {
+        this.procesando = true;
+        this.presupuestoService.asignarPresupuesto(
+          this.programacion.id,
+          this.programacion.id_programa_academico,
+          valor
+        ).subscribe(() => {
+          this.programacionService.aprobarDecano(this.programacion.id).subscribe(data => {
+            this.programacion = data;
+            this.procesando = false;
+          });
+        });
+      }
     });
   }
 
