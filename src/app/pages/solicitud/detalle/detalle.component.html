@@ -94,22 +94,79 @@
       </mat-card-content>
     </mat-card>
 
+ <!-- Documentos oficiales -->
+    <mat-card class="mb-3">
+      <mat-card-title>Documentos oficiales</mat-card-title>
+      <mat-card-content>
+        <div class="row mt-3">
+          <div class="col-auto mb-2">
+            <button mat-stroked-button color="primary" (click)="verDocumento('resolucion')">
+              <mat-icon>print</mat-icon> Resolución
+            </button>
+          </div>
+          <div class="col-auto mb-2">
+            <button mat-stroked-button color="primary" (click)="verDocumento('oficio')">
+              <mat-icon>print</mat-icon> Oficio
+            </button>
+          </div>
+          <div class="col-auto mb-2">
+            <button mat-stroked-button color="primary" (click)="verDocumento('transporte')">
+              <mat-icon>print</mat-icon> Solicitud transporte
+            </button>
+          </div>
+          <div class="col-auto mb-2">
+            <button mat-stroked-button color="primary" (click)="verDocumento('avance')">
+              <mat-icon>print</mat-icon> Solicitud avance
+            </button>
+          </div>
+          <div class="col-auto mb-2">
+            <button mat-stroked-button color="primary" (click)="verDocumento('giro')">
+              <mat-icon>print</mat-icon> Autorización giro
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    
     <!-- Estudiantes -->
     <mat-card class="mb-3">
       <mat-card-content>
         <div class="row align-items-center">
           <div class="col">
             <h3 class="mb-0">Estudiantes inscritos</h3>
-            <p class="text-muted mb-0">Gestión de documentos y habilitación</p>
+            <p class="text-muted mb-0">Gestión de documentos y habilitación</p >
           </div>
           <div class="col-auto">
+            <input type="file" #fileInput hidden accept=".xlsx,.xls" (change)="subirListado($event)">
+            <button mat-stroked-button color="primary" (click)="fileInput.click()" [disabled]="subiendoListado" class="mr-2">
+              <mat-icon>upload_file</mat-icon>
+              {{ subiendoListado ? 'Procesando...' : 'Importar listado (Excel)' }}
+            </button>
             <button mat-raised-button color="primary" (click)="verEstudiantes()">
               <mat-icon>people</mat-icon> Ver estudiantes
             </button>
           </div>
         </div>
+
+        <div class="alerta-info mt-3" *ngIf="resultadoImportacion">
+          <mat-icon>{{ resultadoImportacion.exitoso ? 'check_circle' : 'error' }}</mat-icon>
+          {{ resultadoImportacion.mensaje }}
+        </div>
+
       </mat-card-content>
     </mat-card>
-
-  </div>
-</div>
+    <!-- Historial de auditoría -->
+    <mat-card class="mb-3">
+      <mat-card-title>Historial de la solicitud</mat-card-title>
+      <mat-card-content>
+        <p class="text-muted mt-2" *ngIf="historial.length === 0">Aún no hay movimientos registrados.</p >
+        <div class="row mt-3" *ngFor="let h of historial" style="border-left: 3px solid #4CAF50; padding-left: 12px; margin-bottom: 12px;">
+          <div class="col">
+            <strong>{{ h.accion }}</strong>
+            <span *ngIf="h.observacion"> — "{{ h.observacion }}"</span>
+            <br>
+            <small class="text-muted">{{ h.usuario }} · {{ h.fecha }}</small>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>

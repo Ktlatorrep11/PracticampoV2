@@ -43,20 +43,26 @@ export class DetalleComponent implements OnInit {
   volver(): void {
     this.router.navigate(['/pages/programaciones']);
   }
+  
+  imprimir(): void {
+    window.print();
+  }
 
   enviarACoordinador(): void {
+    if (!confirm('¿Confirmas enviar esta programación al Coordinador para revisión?')) return;
     this.procesando = true;
-    this.programacionService.enviarACoordinador(this.programacion.id).subscribe(data => {
-      this.programacion = data;
-      this.procesando = false;
+    this.programacionService.enviarACoordinador(this.programacion.id).subscribe({
+      next: data => { this.programacion = data; this.procesando = false; },
+      error: () => { this.procesando = false; alert('Ocurrió un error al enviar la programación. Intenta de nuevo.'); }
     });
   }
 
   aprobarCoordinador(): void {
+    if (!confirm('¿Confirmas la aprobación de esta programación como Coordinador?')) return;
     this.procesando = true;
-    this.programacionService.aprobarCoordinador(this.programacion.id).subscribe(data => {
-      this.programacion = data;
-      this.procesando = false;
+    this.programacionService.aprobarCoordinador(this.programacion.id).subscribe({
+      next: data => { this.programacion = data; this.procesando = false; },
+      error: () => { this.procesando = false; alert('Ocurrió un error al aprobar. Intenta de nuevo.'); }
     });
   }
 
@@ -65,28 +71,32 @@ export class DetalleComponent implements OnInit {
     dialogRef.afterClosed().subscribe(observacion => {
       if (observacion) {
         this.procesando = true;
-        this.programacionService.rechazarCoordinador(this.programacion.id, observacion).subscribe(data => {
-          this.programacion = data;
-          this.procesando = false;
+        this.programacionService.rechazarCoordinador(this.programacion.id, observacion).subscribe({
+          next: data => { this.programacion = data; this.procesando = false; },
+          error: () => { this.procesando = false; alert('Ocurrió un error al rechazar. Intenta de nuevo.'); }
         });
       }
     });
   }
 
-  aprobarDecano(): void {
+   aprobarDecano(): void {
     const dialogRef = this.dialog.open(DialogoPresupuestoComponent, { width: '500px' });
     dialogRef.afterClosed().subscribe(valor => {
       if (valor) {
+        if (!confirm('¿Confirmas el visto bueno como Decano con el presupuesto asignado?')) return;
         this.procesando = true;
         this.presupuestoService.asignarPresupuesto(
           this.programacion.id,
           this.programacion.id_programa_academico,
           valor
-        ).subscribe(() => {
-          this.programacionService.aprobarDecano(this.programacion.id).subscribe(data => {
-            this.programacion = data;
-            this.procesando = false;
-          });
+        ).subscribe({
+          next: () => {
+            this.programacionService.aprobarDecano(this.programacion.id).subscribe({
+              next: data => { this.programacion = data; this.procesando = false; },
+              error: () => { this.procesando = false; alert('Ocurrió un error al aprobar. Intenta de nuevo.'); }
+            });
+          },
+          error: () => { this.procesando = false; alert('Ocurrió un error al asignar el presupuesto. Intenta de nuevo.'); }
         });
       }
     });
@@ -143,11 +153,11 @@ export class DetalleComponent implements OnInit {
   }
 
   legalizar(): void {
+    if (!confirm('¿Confirmas la legalización de esta práctica? Esta acción es definitiva y cierra el proceso.')) return;
     this.procesando = true;
-    this.programacionService.legalizar(this.programacion.id).subscribe(data => {
-      this.programacion = data;
-      this.procesando = false;
+    this.programacionService.legalizar(this.programacion.id).subscribe({
+      next: data => { this.programacion = data; this.procesando = false; },
+      error: () => { this.procesando = false; alert('Ocurrió un error al legalizar. Intenta de nuevo.'); }
     });
   }
-
-}
+  }

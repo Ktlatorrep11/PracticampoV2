@@ -30,6 +30,21 @@ export class SolicitudService {
     return this.http.get<Solicitud>(`${this.apiUrl}/solicitudes/${id}`);
   }
 
+  crear(datos: any): Observable<Solicitud> {
+    if (environment.useMocks) {
+      const nuevoId = Math.max(...this.solicitudes.map(s => s.id), 0) + 1;
+      const nuevaSolicitud: any = {
+        ...datos,
+        id: nuevoId,
+        id_estado: 1,
+        fecha_diligenciamiento: new Date().toISOString().split('T')[0],
+      };
+      this.solicitudes.push(nuevaSolicitud);
+      return of(nuevaSolicitud);
+    }
+    return this.http.post<Solicitud>(`${this.apiUrl}/solicitudes`, datos);
+  }
+
   cambiarEstado(id: number, nuevoEstado: number, observacion: string = ''): Observable<Solicitud> {
     if (environment.useMocks) {
       const index = this.solicitudes.findIndex(s => s.id === id);
@@ -67,6 +82,17 @@ export class SolicitudService {
 
   cerrar(id: number): Observable<Solicitud> {
     return this.cambiarEstado(id, 8);
+  }
+
+  importarEstudiantesPorDocumento(idSolicitud: number, documentos: (string | number)[]): Observable<any> {
+    if (environment.useMocks) {
+      // SIMULACIÓN — la integración real consulta el SGA por cada documento
+      // y trae nombre, código, correo y programa académico automáticamente.
+      console.log(`Simulando importación de ${documentos.length} estudiantes para la solicitud ${idSolicitud}:`, documentos);
+      return of({ inscritos: documentos.length, exitoso: true });
+    }
+    return this.http.post(`${this.apiUrl}/solicitudes/${idSolicitud}/importar-estudiantes`,
+      { documentos });
   }
 
 }

@@ -1,0 +1,61 @@
+
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SolicitudService } from '../services/solicitud.service';
+import { ResolucionService } from '../services/resolucion.service';
+
+@Component({
+  selector: 'app-documento-oficial',
+  templateUrl: './documento-oficial.component.html',
+  styleUrls: ['./documento-oficial.component.scss']
+})
+export class DocumentoOficialComponent implements OnInit {
+
+  solicitud: any = {};
+  tipo: string = 'resolucion';
+  numero: string = '';
+  fecha: string = '';
+  textos: any = {};
+  cargando = true;
+
+  titulos: any = {
+    resolucion: { titulo: 'RESOLUCIÓN', subtitulo: 'Por medio de la cual se aprueba una práctica académica de campo' },
+    oficio: { titulo: 'OFICIO', subtitulo: 'Remisión de documentación de práctica académica de campo' },
+    transporte: { titulo: 'SOLICITUD DE TRANSPORTE', subtitulo: 'Solicitud de servicio de transporte — GC-PR-005' },
+    avance: { titulo: 'SOLICITUD DE AVANCE', subtitulo: 'Solicitud de anticipo de recursos para práctica académica de campo' },
+    giro: { titulo: 'AUTORIZACIÓN DE GIRO', subtitulo: 'Autorización de pago de viáticos y gastos de práctica académica' },
+  };
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private solicitudService: SolicitudService,
+    private resolucionService: ResolucionService,
+  ) {}
+
+  ngOnInit(): void {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.tipo = this.route.snapshot.paramMap.get('tipo') || 'resolucion';
+
+    this.solicitudService.getById(id).subscribe(data => {
+      this.solicitud = data;
+      this.numero = `DFAMARENA-${String(id).padStart(3, '0')}-2026`;
+      this.fecha = new Date().toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' });
+      this.textos = this.resolucionService.getTextos();
+      this.cargando = false;
+    });
+  }
+
+  get info() {
+    return this.titulos[this.tipo];
+  }
+
+  imprimir(): void {
+    window.print();
+  }
+
+  volver(): void {
+    this.router.navigate(['/pages/solicitudes', this.solicitud.id]);
+  }
+
+}

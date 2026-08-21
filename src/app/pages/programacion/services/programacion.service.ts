@@ -30,6 +30,21 @@ export class ProgramacionService {
     return this.http.get<Programacion>(`${this.apiUrl}/programaciones/${id}`);
   }
 
+   crear(datos: any): Observable<Programacion> {
+    if (environment.useMocks) {
+      const nuevoId = Math.max(...this.programaciones.map(p => p.id), 0) + 1;
+      const nuevaProgramacion: any = {
+        ...datos,
+        id: nuevoId,
+        id_estado: 1,
+        fecha_diligenciamiento: new Date().toISOString().split('T')[0],
+      };
+      this.programaciones.push(nuevaProgramacion);
+      return of(nuevaProgramacion);
+    }
+    return this.http.post<Programacion>(`${this.apiUrl}/programaciones`, datos);
+  }
+
   cambiarEstado(id: number, nuevoEstado: number, observacion: string = ''): Observable<Programacion> {
     if (environment.useMocks) {
       const index = this.programaciones.findIndex(p => p.id === id);
@@ -50,8 +65,8 @@ export class ProgramacionService {
     return this.cambiarEstado(id, 2);
   }
 
-  aprobarCoordinador(id: number): Observable<Programacion> {
-    return this.cambiarEstado(id, 3);
+   aprobarCoordinador(id: number): Observable<Programacion> {
+    return this.cambiarEstado(id, 5);
   }
 
   rechazarCoordinador(id: number, observacion: string = ''): Observable<Programacion> {

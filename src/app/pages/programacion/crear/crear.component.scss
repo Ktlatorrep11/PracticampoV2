@@ -40,3 +40,59 @@
 mat-form-field {
   margin-bottom: 8px;
 }
+
+.riesgos-subtitulo {
+  font-size: 13.5px;
+  color: #666;
+  text-align: left;
+  margin: 0 0 14px;
+}
+
+.riesgos-lista {
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.riesgos-fila {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 18px;
+  border-bottom: 1px solid #EEE;
+
+  &--ultima {
+    border-bottom: none;
+  }
+}
+
+.riesgos-texto {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+
+  span {
+    font-size: 13.5px;
+    color: #333;
+    line-height: 1.4;
+  }
+}
+
+.riesgos-icono {
+  color: #2E5FA3;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+// Fuerza a que el toggle no envuelva el texto internamente
+::ng-deep .riesgos-fila mat-slide-toggle .mdc-form-field {
+  display: flex;
+}
+
+::ng-deep .riesgos-fila mat-slide-toggle .mdc-label {
+  display: none;
+}

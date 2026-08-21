@@ -1,0 +1,74 @@
+
+<div class="login-pantalla">
+
+  <div class="login-panel-izq">
+    <div class="login-eyebrow">Universidad Distrital Francisco José de Caldas</div>
+    <h1 class="login-titulo">Practi<span>Campo</span>UD</h1>
+    <p class="login-descripcion">
+      Sistema de gestión de programaciones, solicitudes y prácticas académicas
+      de campo — Facultad del Medio Ambiente y Recursos Naturales.
+    </p >
+  </div>
+
+  <div class="login-panel-der">
+
+    <!-- Selección inicial -->
+    <div *ngIf="!modo">
+      <h2 class="login-panel-titulo">Selecciona un rol para ingresar</h2>
+      <p class="login-panel-subtitulo">Modo de demostración — simula el ingreso institucional</p >
+
+      <div class="login-roles">
+        <button class="login-rol-btn" (click)="seleccionarModo('usuario')">
+          <div class="login-rol-nombre">Usuario</div>
+          <div class="login-rol-ejemplo">Ingreso institucional (Docente, Coordinador, Decanatura...)</div>
+        </button>
+        <button class="login-rol-btn" (click)="seleccionarModo('estudiante')">
+          <div class="login-rol-nombre">Estudiante</div>
+          <div class="login-rol-ejemplo">Correo institucional y código estudiantil</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Formulario Usuario -->
+    <div *ngIf="modo === 'usuario'">
+      <button class="login-volver" (click)="volver()">← Volver</button>
+      <h2 class="login-panel-titulo">Acceso Usuario</h2>
+      <p class="login-panel-subtitulo">Ingresa con tu usuario institucional</p >
+
+      <div class="login-campo">
+        <label>Usuario</label>
+        <input type="text" [(ngModel)]="usuario" placeholder="practicampo@udistrital.edu.co">
+      </div>
+      <div class="login-campo">
+        <label>Contraseña</label>
+        <input type="password" [(ngModel)]="contrasena" placeholder="••••••••">
+      </div>
+
+      <button class="login-acceder-btn" [disabled]="cargando" (click)="acceder()">
+        {{ cargando ? 'Verificando...' : 'Acceder' }}
+      </button>
+    </div>
+
+    <!-- Formulario Estudiante -->
+    <div *ngIf="modo === 'estudiante'">
+      <button class="login-volver" (click)="volver()">← Volver</button>
+      <h2 class="login-panel-titulo">Acceso Estudiante</h2>
+      <p class="login-panel-subtitulo">Ingresa con tu correo y código estudiantil</p >
+
+      <div class="login-campo">
+        <label>Correo institucional</label>
+        <input type="text" [(ngModel)]="correoEstudiante" placeholder="nombre@udistrital.edu.co">
+      </div>
+      <div class="login-campo">
+        <label>Código estudiantil</label>
+        <input type="text" [(ngModel)]="codigoEstudiante" placeholder="20191025034">
+      </div>
+
+      <button class="login-acceder-btn" [disabled]="cargando" (click)="acceder()">
+        {{ cargando ? 'Verificando...' : 'Acceder' }}
+      </button>
+    </div>
+
+  </div>
+
+</div>

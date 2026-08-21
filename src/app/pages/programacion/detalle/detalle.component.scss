@@ -42,3 +42,27 @@
     color: #C62828;
   }
 }
+
+@media print {
+  ::ng-deep app-pages > div > *:not(router-outlet):not(app-detalle-programacion) {
+    display: none !important;
+  }
+
+  ::ng-deep .main-container {
+    display: block !important;
+  }
+
+  .no-imprimir {
+    display: none !important;
+  }
+
+  .container-fluid {
+    padding: 0 !important;
+  }
+
+  mat-card {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+    break-inside: avoid;
+  }
+}

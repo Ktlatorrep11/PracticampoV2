@@ -1,0 +1,330 @@
+
+.pantalla-resolucion {
+  display: flex;
+  min-height: 100vh;
+  background: #f0f0f0;
+}
+
+// ============ EDITOR (columna izquierda) ============
+.editor {
+  width: 420px;
+  min-width: 420px;
+  background: #fff;
+  border-right: 1px solid #ddd;
+  padding: 20px;
+  overflow-y: auto;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+
+  &__cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+
+    h2 {
+      font-size: 18px;
+      margin: 0;
+    }
+  }
+}
+
+.pestanas {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #ddd;
+
+  button {
+    flex: 1;
+    padding: 10px 6px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 13px;
+    color: #666;
+    border-bottom: 2px solid transparent;
+
+    &.activa {
+      color: #2e7d32;
+      border-bottom-color: #2e7d32;
+      font-weight: 600;
+    }
+  }
+}
+
+.panel {
+  h3 {
+    font-size: 14px;
+    margin: 18px 0 8px;
+    color: #333;
+  }
+
+  .nota {
+    font-size: 11.5px;
+    color: #888;
+    margin-bottom: 8px;
+  }
+}
+
+.rejilla-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.rejilla-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  color: #555;
+  gap: 4px;
+
+  input, textarea {
+    padding: 7px 9px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: inherit;
+  }
+}
+
+.fila-editor {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  background: #fafafa;
+
+  &__titulo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12.5px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .calculo {
+    list-style: none;
+    padding: 8px;
+    margin: 8px 0 0;
+    background: #fff;
+    border-radius: 6px;
+    font-size: 11.5px;
+
+    li { margin-bottom: 2px; }
+  }
+}
+
+.parrafo-editor {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 12px;
+
+  &__barra {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  &__numero {
+    background: #2e7d32;
+    color: #fff;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+  }
+
+  &__rotulo {
+    flex: 1;
+    font-weight: 600;
+    font-size: 12.5px;
+    border: none;
+    background: transparent;
+  }
+
+  &__botones {
+    display: flex;
+    gap: 4px;
+
+    button {
+      width: 24px;
+      height: 24px;
+      border: 1px solid #ddd;
+      background: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+
+      &:disabled { opacity: 0.3; cursor: default; }
+    }
+  }
+
+  textarea {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 12.5px;
+    font-family: inherit;
+    box-sizing: border-box;
+  }
+}
+
+.tokens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+
+  button {
+    font-size: 10.5px;
+    padding: 3px 7px;
+    background: #eef5ee;
+    color: #2e7d32;
+    border: 1px solid #cfe3cf;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+}
+
+.vineta textarea {
+  width: 100%;
+  margin-bottom: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 6px;
+  box-sizing: border-box;
+}
+
+.btn {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+
+  &--primario { background: #2e7d32; color: #fff; }
+  &--secundario { background: #eef5ee; color: #2e7d32; border: 1px solid #cfe3cf; }
+  &--texto { background: transparent; color: #888; font-weight: 400; font-size: 12px; }
+}
+
+// ============ HOJA (documento imprimible) ============
+.hoja {
+  flex: 1;
+  max-width: 780px;
+  margin: 30px auto;
+  background: #fff;
+  padding: 60px 56px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  font-family: 'Times New Roman', serif;
+  color: #111;
+
+  &__facultad {
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    margin-bottom: 24px;
+  }
+
+  &__titulo {
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 14px;
+  }
+
+  &__epigrafe {
+    text-align: center;
+    font-style: italic;
+    font-size: 13px;
+    margin-bottom: 24px;
+  }
+
+  &__seccion {
+    text-align: center;
+    font-size: 14px;
+    margin: 26px 0 14px;
+    letter-spacing: 0.5px;
+  }
+
+  &__parrafo {
+    font-size: 13px;
+    line-height: 1.8;
+    text-align: justify;
+    margin-bottom: 12px;
+  }
+
+  &__tabla {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 11.5px;
+
+    th, td {
+      border: 1px solid #333;
+      padding: 6px 8px;
+    }
+
+    th {
+      background: #f0f0f0;
+      text-align: center;
+    }
+
+    .centro { text-align: center; }
+    .derecha { text-align: right; }
+  }
+
+  &__vinetas {
+    font-size: 13px;
+    line-height: 1.8;
+    margin: 0 0 12px 24px;
+  }
+
+  &__firma {
+    margin-top: 50px;
+    text-align: center;
+
+    &-nte, p { margin: 0; }
+  }
+
+  &__firmante {
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+}
+
+// ============ IMPRESIÓN ============
+@media print {
+  .editor {
+    display: none;
+  }
+
+  .pantalla-resolucion {
+    display: block;
+    background: #fff;
+  }
+
+  .hoja {
+    box-shadow: none;
+    margin: 0;
+    padding: 20px;
+    max-width: 100%;
+  }
+}

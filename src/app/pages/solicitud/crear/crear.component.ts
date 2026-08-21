@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Programacion } from '../../../shared/models';
 import { ProgramacionService } from '../../programacion/services/programacion.service';
+import { SolicitudService } from '../services/solicitud.service';
 
 @Component({
   selector: 'app-crear-solicitud',
@@ -20,12 +21,13 @@ export class CrearSolicitudComponent implements OnInit {
     { id: 2, nombre: 'Ruta alterna' },
   ];
 
-  constructor(
+   constructor(
     private fb: FormBuilder,
     private router: Router,
     private programacionService: ProgramacionService,
+    private solicitudService: SolicitudService,
   ) {}
-
+  
   ngOnInit(): void {
     this.programacionService.getAll().subscribe(data => {
       this.programaciones = data.filter(p => p.id_estado === 5);
@@ -39,14 +41,32 @@ export class CrearSolicitudComponent implements OnInit {
       consec_cordis:            [''],
       fecha_salida_real:        [''],
       fecha_regreso_real:       [''],
-      observaciones:            [''],
+ observaciones:            [''],
+      doc_seguro_estudiantil:   [true],
+      doc_identificacion:       [true],
+      doc_eps:                  [true],
+      doc_permiso_acudiente:    [false],
+      doc_vacuna_fiebre_amarilla: [false],
+      doc_vacuna_tetanos:       [false],
+      doc_certificado_natacion: [false],
     });
+
   }
 
   guardar(): void {
     if (this.form.valid) {
-      console.log('Solicitud:', this.form.value);
-      this.router.navigate(['/pages/solicitudes']);
+      if (!confirm('¿Confirmas guardar esta solicitud?')) return;
+      this.solicitudService.crear(this.form.value).subscribe({
+        next: () => {
+          this.router.navigate(['/pages/solicitudes']);
+        },
+        error: () => {
+          alert('Ocurrió un error al guardar la solicitud. Por favor intenta de nuevo.');
+        }
+      });
+    } else {
+      this.form.markAllAsTouched();
+      alert('Faltan campos obligatorios por completar. Revisa el formulario antes de guardar.');
     }
   }
 

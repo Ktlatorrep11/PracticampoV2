@@ -18,6 +18,7 @@ import { DetalleComponent } from './detalle/detalle.component';
 import { DialogoRechazoComponent } from './dialogo-rechazo/dialogo-rechazo.component';
 import { DialogoPresupuestoComponent } from './dialogo-presupuesto/dialogo-presupuesto.component';
 import { DialogoEjecucionComponent } from './dialogo-ejecucion/dialogo-ejecucion.component';
+import { AiGeneratorComponent } from '../../componentes/ai-generator.component';
 
 const routes: Routes = [
   { path: '', component: ListadoComponent },
@@ -33,7 +34,9 @@ const routes: Routes = [
     DialogoRechazoComponent,
     DialogoPresupuestoComponent,
     DialogoEjecucionComponent,
+    AiGeneratorComponent,
   ],
+
   imports: [
     CommonModule,
     FormsModule,

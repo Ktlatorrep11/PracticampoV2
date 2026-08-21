@@ -71,6 +71,10 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['/pages/usuarios']);
   }
 
+   irEstudiantes(): void {
+    this.router.navigate(['/pages/estudiantes']);
+  }
+
   nuevaProgramacion(): void {
     this.router.navigate(['/pages/programaciones/crear']);
   }

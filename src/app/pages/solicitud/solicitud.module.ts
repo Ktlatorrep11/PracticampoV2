@@ -14,18 +14,21 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ListadoSolicitudComponent } from './listado/listado.component';
 import { DetalleSolicitudComponent } from './detalle/detalle.component';
 import { CrearSolicitudComponent } from './crear/crear.component';
+import { ResolucionComponent } from './resolucion/resolucion.component';
 
 const routes: Routes = [
   { path: '', component: ListadoSolicitudComponent },
   { path: 'crear', component: CrearSolicitudComponent },
+  { path: ':id/resolucion', component: ResolucionComponent },
   { path: ':id', component: DetalleSolicitudComponent },
 ];
 
 @NgModule({
-  declarations: [
+    declarations: [
     ListadoSolicitudComponent,
     DetalleSolicitudComponent,
     CrearSolicitudComponent,
+    ResolucionComponent,
   ],
   imports: [
     CommonModule,

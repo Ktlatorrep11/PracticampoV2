@@ -14,8 +14,7 @@
   <!-- Indicador de pasos -->
   <mat-card class="mb-3 p-2">
     <div class="stepper-indicador">
-      <span *ngFor="let p of [1,2,3,4,5,6,7]"
-        [class.activo]="p === paso"
+       <span *ngFor="let p of [1,2,3,4,5,6,7,8]"        [class.activo]="p === paso"
         [class.completado]="p < paso">
         {{ p }}
       </span>
@@ -32,22 +31,40 @@
 
           <div class="col-md-6">
             <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Espacio académico *</mat-label>
-              <mat-select formControlName="id_espacio_academico">
-                <mat-option [value]="1">Ecología</mat-option>
-                <mat-option [value]="2">Botánica</mat-option>
-                <mat-option [value]="3">Zoología</mat-option>
+              <mat-label>Docente responsable *</mat-label>
+              <mat-select formControlName="id_docente_responsable" (selectionChange)="onDocenteSeleccionado($event.value)">
+                <mat-option *ngFor="let d of docentes" [value]="d.id">
+                  {{ getNombreDocente(d) }}
+                </mat-option>
               </mat-select>
+              <mat-hint>Simula el inicio de sesión — luego vendrá del SGA automáticamente</mat-hint>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Tipo de vinculación *</mat-label>
+              <input matInput [value]="getNombreVinculacion(form.get('id_tipo_vinculacion')?.value)" readonly>
+              <mat-hint>Detectado automáticamente del SGA</mat-hint>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Espacio académico *</mat-label>
+              <mat-select formControlName="id_espacio_academico" (selectionChange)="onEspacioSeleccionado($event.value)"
+                [disabled]="espaciosDelDocente.length === 0">
+                <mat-option *ngFor="let e of espaciosDelDocente" [value]="e.id">{{ e.nombre }}</mat-option>
+              </mat-select>
+              <mat-hint *ngIf="espaciosDelDocente.length === 0">Selecciona primero un docente</mat-hint>
             </mat-form-field>
           </div>
 
           <div class="col-md-6">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Programa académico *</mat-label>
-              <mat-select formControlName="id_programa_academico">
-                <mat-option [value]="1">Ingeniería Forestal</mat-option>
-                <mat-option [value]="2">Administración Ambiental</mat-option>
-              </mat-select>
+              <input matInput [value]="getNombrePrograma(form.get('id_programa_academico')?.value)" readonly>
+              <mat-hint>Se completa según el espacio académico</mat-hint>
             </mat-form-field>
           </div>
 
@@ -112,15 +129,6 @@
             </mat-form-field>
           </div>
 
-          <div class="col-md-6">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Tipo de vinculación del docente *</mat-label>
-              <mat-select formControlName="id_tipo_vinculacion">
-                <mat-option *ngFor="let t of tiposVinculacion" [value]="t.id">{{ t.nombre }}</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-
           <!-- Alerta vinculación especial -->
           <div class="col-12" *ngIf="esVinculacionEspecial">
             <mat-card class="alerta-info">
@@ -132,6 +140,7 @@
         </div>
       </mat-card-content>
     </mat-card>
+
 
     <!-- PASO 2 — Ruta principal -->
     <mat-card *ngIf="paso === 2" class="mb-3">
@@ -279,23 +288,82 @@
       <mat-card-title>Materiales y herramientas</mat-card-title>
       <mat-card-content>
         <div class="row mt-3">
-          <div class="col-12">
-            <p class="text-muted">Listado de materiales y herramientas necesarios para la práctica.</p>
-            <p class="text-muted">(Esta sección se completará en la siguiente iteración)</p>
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Guías / Baquianos</mat-label>
+              <textarea matInput formControlName="det_guias_baquianos" rows="3" placeholder="Descripción de guías necesarios..."></textarea>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Valor total guías / baquianos ($)</mat-label>
+              <input matInput type="number" formControlName="valor_guias_baquianos" placeholder="0">
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Otros (boletas, entradas, etc.)</mat-label>
+              <textarea matInput formControlName="det_otros_boletas" rows="3" placeholder="Ej: Entrada parque nacional..."></textarea>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Valor total otros ($)</mat-label>
+              <input matInput type="number" formControlName="valor_otros_boletas" placeholder="0">
+            </mat-form-field>
           </div>
         </div>
       </mat-card-content>
     </mat-card>
 
-    <!-- PASO 6 — Riesgos -->
+ <!-- PASO 6 — Riesgos -->
     <mat-card *ngIf="paso === 6" class="mb-3">
       <mat-card-title>Riesgos y amenazas</mat-card-title>
       <mat-card-content>
-        <div class="row mt-3">
-          <div class="col-12">
-            <p class="text-muted">Identificación de riesgos y amenazas de la práctica.</p>
-            <p class="text-muted">(Esta sección se completará en la siguiente iteración)</p>
+        <p class="riesgos-subtitulo">Indique si la práctica desarrolla alguna de las siguientes actividades:</p >
+
+        <div class="riesgos-lista">
+
+          <div class="riesgos-fila">
+            <div class="riesgos-texto">
+              <mat-icon class="riesgos-icono">water_drop</mat-icon>
+              <span>¿Desarrolla maniobras sobre áreas acuáticas (ríos, lagos, humedales)?</span>
+            </div>
+            <mat-slide-toggle formControlName="areas_acuaticas" color="primary"></mat-slide-toggle>
           </div>
+
+          <div class="riesgos-fila">
+            <div class="riesgos-texto">
+              <mat-icon class="riesgos-icono">terrain</mat-icon>
+              <span>¿Desarrolla actividades de escalada o trabajo en alturas?</span>
+            </div>
+            <mat-slide-toggle formControlName="alturas" color="primary"></mat-slide-toggle>
+          </div>
+
+          <div class="riesgos-fila">
+            <div class="riesgos-texto">
+              <mat-icon class="riesgos-icono">eco</mat-icon>
+              <span>¿Desarrolla actividades con riesgo biológico en bosques?</span>
+            </div>
+            <mat-slide-toggle formControlName="riesgo_biologico" color="primary"></mat-slide-toggle>
+          </div>
+
+          <div class="riesgos-fila">
+            <div class="riesgos-texto">
+              <mat-icon class="riesgos-icono">door_back</mat-icon>
+              <span>¿Desarrolla actividades en espacios confinados?</span>
+            </div>
+            <mat-slide-toggle formControlName="espacios_confinados" color="primary"></mat-slide-toggle>
+          </div>
+
+          <div class="riesgos-fila riesgos-fila--ultima">
+            <div class="riesgos-texto">
+              <mat-icon class="riesgos-icono">shield</mat-icon>
+              <span>¿Cuenta con plan de contingencia basado en matriz de riesgos?</span>
+            </div>
+            <mat-slide-toggle formControlName="plan_contingencia" color="warn"></mat-slide-toggle>
+          </div>
+
         </div>
       </mat-card-content>
     </mat-card>
@@ -305,16 +373,90 @@
       <mat-card-title>Presupuesto estimado</mat-card-title>
       <mat-card-content>
         <div class="row mt-3">
-          <div class="col-12">
-            <p class="text-muted">Estimación del presupuesto requerido para la práctica.</p>
-            <p class="text-muted">(Esta sección se completará en la siguiente iteración)</p>
+          <div class="col-12 mb-3">
+            <p class="text-muted">El sistema calcula automáticamente los viáticos según el número de estudiantes, docentes y días de práctica.</p >
           </div>
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Viáticos estudiantes ($)</mat-label>
+              <input matInput type="number" formControlName="viaticos_estudiantes" readonly>
+              <mat-hint>Calculado automáticamente</mat-hint>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Viáticos docente ($)</mat-label>
+              <input matInput type="number" formControlName="viaticos_docente" readonly>
+              <mat-hint>Calculado automáticamente</mat-hint>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6 mt-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Valor estimado transporte ($)</mat-label>
+              <input matInput type="number" formControlName="valor_estimado_transporte">
+            </mat-form-field>
+          </div>
+          <div class="col-md-6 mt-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Total presupuesto estimado ($)</mat-label>
+              <input matInput type="number" formControlName="valor_total" readonly>
+              <mat-hint>Suma de todos los valores</mat-hint>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-card-content>
+  </mat-card>
+
+    <!-- PASO 8 — Información académica -->
+    <mat-card *ngIf="paso === 8" class="mb-3">
+      <mat-card-title>Información académica</mat-card-title>
+      <mat-card-content>
+        <div class="row mt-3">
+<div class="col-12 mt-3">
+            <app-ai-generator
+              [materia]="form.get('id_espacio_academico')?.value"
+              [destino]="form.get('destino_rp')?.value"
+              [diasDuracion]="form.get('duracion_num_dias_rp')?.value"
+              (textosGenerados)="onTextosGenerados($event)">
+            </app-ai-generator>
+          </div>
+          <div class="col-12">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Cronograma del recorrido *</mat-label>
+              <textarea matInput formControlName="cronograma_recorrido" rows="3"
+                placeholder="Describa el cronograma día a día del recorrido..."></textarea>
+            </mat-form-field>
+          </div>
+
+          <div class="col-12">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Justificación de la práctica *</mat-label>
+              <textarea matInput formControlName="justificacion" rows="3"
+                placeholder="Justifique académicamente la salida de práctica..."></textarea>
+            </mat-form-field>
+          </div>
+
+          <div class="col-12">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Objetivo general *</mat-label>
+              <textarea matInput formControlName="objetivo_general" rows="2"
+                placeholder="Objetivo general de la práctica..."></textarea>
+            </mat-form-field>
+          </div>
+
+          <div class="col-12">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Metodología de trabajo *</mat-label>
+              <textarea matInput formControlName="metodologia" rows="3"
+                placeholder="Describa la metodología a emplear..."></textarea>
+            </mat-form-field>
+          </div>
+
         </div>
       </mat-card-content>
     </mat-card>
 
   </form>
-
   <!-- Botones de navegación -->
   <div class="row mt-3 mb-5">
     <div class="col">

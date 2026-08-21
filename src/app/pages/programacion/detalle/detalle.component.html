@@ -1,6 +1,6 @@
 <div class="container-fluid mt-4">
 
-  <div class="row mb-3">
+  <div class="row mb-3 no-imprimir">
     <div class="col">
       <button mat-button (click)="volver()">
         <mat-icon>arrow_back</mat-icon> Volver al listado
@@ -22,13 +22,18 @@
             <h2 class="mb-0">{{ programacion.destino_rp }}</h2>
             <p class="text-muted mb-0">Programación #{{ programacion.id }}</p>
           </div>
-          <div class="col-auto">
+                  <div class="col-auto">
             <span class="badge-estado">{{ getEstado(programacion.id_estado) }}</span>
+          </div>
+          <div class="col-auto no-imprimir">
+            <button mat-stroked-button color="primary" (click)="imprimir()">
+              <mat-icon>print</mat-icon> Imprimir / Guardar PDF
+            </button>
           </div>
         </div>
 
-        <!-- Acciones según estado -->
-        <div class="row mt-3">
+         <!-- Acciones según estado -->
+        <div class="row mt-3 no-imprimir">
           <div class="col-auto" *ngIf="programacion.id_estado === 1">
             <button mat-raised-button color="primary"
               (click)="enviarACoordinador()" [disabled]="procesando">
@@ -43,17 +48,6 @@
             </button>
             <button mat-raised-button color="warn"
               (click)="rechazarCoordinador()" [disabled]="procesando">
-              <mat-icon>cancel</mat-icon> Rechazar
-            </button>
-          </div>
-
-          <div class="col-auto" *ngIf="programacion.id_estado === 3">
-            <button mat-raised-button color="primary"
-              (click)="aprobarDecano()" [disabled]="procesando" class="mr-2">
-              <mat-icon>verified</mat-icon> Visto bueno decano
-            </button>
-            <button mat-raised-button color="warn"
-              (click)="rechazarDecano()" [disabled]="procesando">
               <mat-icon>cancel</mat-icon> Rechazar
             </button>
           </div>

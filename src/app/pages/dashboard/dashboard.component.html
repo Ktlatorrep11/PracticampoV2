@@ -1,12 +1,13 @@
-<div class="container-fluid mt-4">
+<div class="dash-container">
 
-  <div class="row mb-4">
+  <div class="row mb-4 align-items-end">
     <div class="col">
-      <h2>Dashboard</h2>
-      <p class="text-muted">Resumen del sistema de prácticas de campo — FAMARENA</p>
+      <div class="dash-eyebrow">Panorama general</div>
+      <h2 class="dash-titulo">Dashboard</h2>
+      <p class="dash-subtitulo">Resumen del sistema de prácticas de campo — FAMARENA</p >
     </div>
     <div class="col-auto">
-      <button mat-raised-button color="primary" (click)="nuevaProgramacion()">
+      <button mat-raised-button color="primary" class="btn-dash-primario" (click)="nuevaProgramacion()">
         <mat-icon>add</mat-icon> Nueva Programación
       </button>
     </div>
@@ -18,112 +19,89 @@
 
   <div *ngIf="!cargando">
 
-    <!-- Indicadores de programaciones -->
-    <div class="row mb-4">
-      <div class="col-12 mb-2">
-        <h3 class="seccion-titulo">Programaciones</h3>
+    <!-- Panel principal de indicadores -->
+    <div class="dash-panel mb-4">
+
+      <div class="dash-panel-columna">
+        <div class="dash-panel-titulo"><mat-icon>event_note</mat-icon> Programaciones</div>
+        <div class="dash-fila-indicadores">
+          <div class="dash-mini-indicador" (click)="irProgramaciones()">
+            <div class="dash-mini-numero">{{ totalProgramaciones }}</div>
+            <div class="dash-mini-label">Total</div>
+          </div>
+          <div class="dash-mini-indicador" (click)="irProgramaciones()">
+            <div class="dash-mini-numero color-sage">{{ programacionesPendientes }}</div>
+            <div class="dash-mini-label">Borrador</div>
+          </div>
+          <div class="dash-mini-indicador" (click)="irProgramaciones()">
+            <div class="dash-mini-numero color-azul">{{ programacionesEnAprobacion }}</div>
+            <div class="dash-mini-label">En aprobación</div>
+          </div>
+          <div class="dash-mini-indicador" (click)="irProgramaciones()">
+            <div class="dash-mini-numero color-verde">{{ programacionesAprobadas }}</div>
+            <div class="dash-mini-label">Aprobadas</div>
+          </div>
+        </div>
       </div>
 
-      <div class="col-md-3">
-        <mat-card class="indicador" (click)="irProgramaciones()">
-          <mat-card-content>
-            <div class="indicador-numero">{{ totalProgramaciones }}</div>
-            <div class="indicador-label">Total</div>
-          </mat-card-content>
-        </mat-card>
+      <div class="dash-panel-divisor"></div>
+
+      <div class="dash-panel-columna">
+      <div class="dash-panel-titulo"><mat-icon>assignment</mat-icon> Solicitudes</div>
+        <div class="dash-fila-indicadores">
+          <div class="dash-mini-indicador" (click)="irSolicitudes()">
+            <div class="dash-mini-numero">{{ totalSolicitudes }}</div>
+            <div class="dash-mini-label">Total</div>
+          </div>
+          <div class="dash-mini-indicador" (click)="irSolicitudes()">
+            <div class="dash-mini-numero color-sage">{{ solicitudesPendientes }}</div>
+            <div class="dash-mini-label">Pendientes</div>
+          </div>
+          <div class="dash-mini-indicador" (click)="irSolicitudes()">
+            <div class="dash-mini-numero color-azul">{{ solicitudesEnAprobacion }}</div>
+            <div class="dash-mini-label">En aprobación</div>
+          </div>
+        </div>
       </div>
 
-      <div class="col-md-3">
-        <mat-card class="indicador borrador" (click)="irProgramaciones()">
-          <mat-card-content>
-            <div class="indicador-numero">{{ programacionesPendientes }}</div>
-            <div class="indicador-label">En borrador</div>
-          </mat-card-content>
-        </mat-card>
-      </div>
-
-      <div class="col-md-3">
-        <mat-card class="indicador en-proceso" (click)="irProgramaciones()">
-          <mat-card-content>
-            <div class="indicador-numero">{{ programacionesEnAprobacion }}</div>
-            <div class="indicador-label">En aprobación</div>
-          </mat-card-content>
-        </mat-card>
-      </div>
-
-      <div class="col-md-3">
-        <mat-card class="indicador aprobado" (click)="irProgramaciones()">
-          <mat-card-content>
-            <div class="indicador-numero">{{ programacionesAprobadas }}</div>
-            <div class="indicador-label">Aprobadas</div>
-          </mat-card-content>
-        </mat-card>
-      </div>
-    </div>
-
-    <!-- Indicadores de solicitudes -->
-    <div class="row mb-4">
-      <div class="col-12 mb-2">
-        <h3 class="seccion-titulo">Solicitudes</h3>
-      </div>
-
-      <div class="col-md-4">
-        <mat-card class="indicador" (click)="irSolicitudes()">
-          <mat-card-content>
-            <div class="indicador-numero">{{ totalSolicitudes }}</div>
-            <div class="indicador-label">Total</div>
-          </mat-card-content>
-        </mat-card>
-      </div>
-
-      <div class="col-md-4">
-        <mat-card class="indicador borrador" (click)="irSolicitudes()">
-          <mat-card-content>
-            <div class="indicador-numero">{{ solicitudesPendientes }}</div>
-            <div class="indicador-label">Pendientes</div>
-          </mat-card-content>
-        </mat-card>
-      </div>
-
-      <div class="col-md-4">
-        <mat-card class="indicador en-proceso" (click)="irSolicitudes()">
-          <mat-card-content>
-            <div class="indicador-numero">{{ solicitudesEnAprobacion }}</div>
-            <div class="indicador-label">En aprobación</div>
-          </mat-card-content>
-        </mat-card>
-      </div>
     </div>
 
     <!-- Accesos directos -->
-    <div class="row mb-4">
-      <div class="col-12 mb-2">
-        <h3 class="seccion-titulo">Accesos directos</h3>
-      </div>
-
-      <div class="col-md-4">
-        <mat-card class="acceso" (click)="irProgramaciones()">
+       <!-- Accesos directos -->
+    <div class="dash-divisor-seccion"></div>
+    <div class="dash-panel-titulo dash-panel-titulo--standalone">
+      <mat-icon>widgets</mat-icon> Accesos directos
+    </div>
+    <div class="row">
+      <div class="col-md-3">
+        <mat-card class="dash-acceso" (click)="irProgramaciones()">
           <mat-card-content>
-            <mat-icon class="acceso-icono">event_note</mat-icon>
-            <div class="acceso-label">Programaciones</div>
+            <div class="dash-acceso-icono"><mat-icon>event_note</mat-icon></div>
+            <div class="dash-acceso-label">Programaciones</div>
           </mat-card-content>
         </mat-card>
       </div>
-
-      <div class="col-md-4">
-        <mat-card class="acceso" (click)="irSolicitudes()">
+      <div class="col-md-3">
+        <mat-card class="dash-acceso" (click)="irSolicitudes()">
           <mat-card-content>
-            <mat-icon class="acceso-icono">assignment</mat-icon>
-            <div class="acceso-label">Solicitudes</div>
+            <div class="dash-acceso-icono"><mat-icon>assignment</mat-icon></div>
+            <div class="dash-acceso-label">Solicitudes</div>
           </mat-card-content>
         </mat-card>
       </div>
-
-      <div class="col-md-4">
-        <mat-card class="acceso" (click)="irUsuarios()">
+      <div class="col-md-3">
+        <mat-card class="dash-acceso" (click)="irUsuarios()">
           <mat-card-content>
-            <mat-icon class="acceso-icono">people</mat-icon>
-            <div class="acceso-label">Usuarios</div>
+            <div class="dash-acceso-icono"><mat-icon>people</mat-icon></div>
+            <div class="dash-acceso-label">Usuarios</div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="col-md-3">
+        <mat-card class="dash-acceso" (click)="irEstudiantes()">
+          <mat-card-content>
+            <div class="dash-acceso-icono"><mat-icon>school</mat-icon></div>
+            <div class="dash-acceso-label">Estudiantes</div>
           </mat-card-content>
         </mat-card>
       </div>

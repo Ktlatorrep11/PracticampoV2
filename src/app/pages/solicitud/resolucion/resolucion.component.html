@@ -1,0 +1,295 @@
+
+<div class="pantalla-resolucion">
+  <!-- ================= EDITOR (no se imprime) ================= -->
+  <aside class="editor">
+
+    <header class="editor__cabecera">
+      <h2>Editar resolución</h2>
+      <button type="button" class="btn btn--primario" (click)="imprimir()">
+        Imprimir resolución
+      </button>
+    </header>
+
+    <nav class="pestanas">
+      <button type="button" [class.activa]="panel === 'datos'" (click)="panel = 'datos'">Datos</button>
+      <button type="button" [class.activa]="panel === 'considerandos'" (click)="panel = 'considerandos'">Considerandos</button>
+      <button type="button" [class.activa]="panel === 'articulos'" (click)="panel = 'articulos'">Artículos</button>
+    </nav>
+
+    <!-- ---------- Panel: datos variables ---------- -->
+    <section *ngIf="panel === 'datos'" class="panel">
+
+      <h3>Encabezado</h3>
+      <div class="rejilla-2">
+        <label>Número de resolución
+          <input type="text" [(ngModel)]="resolucion.numero" name="numero" />
+        </label>
+        <label>Año
+          <input type="number" [(ngModel)]="resolucion.anio" name="anio" />
+        </label>
+      </div>
+
+      <h3>Docente responsable del avance</h3>
+      <div class="rejilla-2">
+        <label>Nombre completo
+          <input type="text" [(ngModel)]="resolucion.docente" name="docente" />
+        </label>
+        <label>Cédula
+          <input type="text" [(ngModel)]="resolucion.cedula" name="cedula" />
+        </label>
+        <label>Proyecto curricular
+          <input type="text" [(ngModel)]="resolucion.proyectoCurricular" name="proyecto" />
+        </label>
+        <label>Disponibilidad presupuestal
+          <input type="text" [(ngModel)]="resolucion.disponibilidadPresupuestal" name="cdp" />
+        </label>
+      </div>
+
+      <h3>Aval del Consejo de Facultad</h3>
+      <div class="rejilla-2">
+        <label>Fecha de sesión
+          <input type="text" [(ngModel)]="resolucion.fechaActaConsejo" name="fechaActa"
+                 placeholder="3 de marzo de 2022" />
+        </label>
+        <label>Número de acta
+          <input type="text" [(ngModel)]="resolucion.numeroActa" name="numeroActa" placeholder="005" />
+        </label>
+      </div>
+
+      <h3>Valores vigentes</h3>
+      <p class="nota">Estos valores deben venir de la tabla de parámetros del año. Cámbialos aquí sólo si necesitas un ajuste puntual.</p>
+      <div class="rejilla-3">
+        <label>Viático docente / día
+          <input type="number" [(ngModel)]="resolucion.parametros.viaticoDia" name="viatico" />
+        </label>
+        <label>Auxilio 1 día
+          <input type="number" [(ngModel)]="resolucion.parametros.auxilioUnDia" name="aux1" />
+        </label>
+        <label>Auxilio por día (2+)
+          <input type="number" [(ngModel)]="resolucion.parametros.auxilioMasDias" name="auxN" />
+        </label>
+      </div>
+
+      <h3>Cuadro de la resolución</h3>
+      <div class="fila-editor" *ngFor="let fila of resolucion.filas; let i = index">
+        <div class="fila-editor__titulo">
+          <span>Fila {{ i + 1 }}</span>
+          <button type="button" class="btn btn--texto" (click)="eliminarFila(i)"
+                  [disabled]="resolucion.filas.length === 1">Eliminar</button>
+        </div>
+        <div class="rejilla-2">
+          <label>Asignatura
+            <input type="text" [(ngModel)]="fila.asignatura" [name]="'asig' + i" />
+          </label>
+          <label>Docentes
+            <input type="text" [(ngModel)]="fila.docentes" [name]="'doc' + i" />
+          </label>
+          <label>Sitio de desarrollo
+            <input type="text" [(ngModel)]="fila.sitio" [name]="'sitio' + i" />
+          </label>
+          <label>Fecha
+            <input type="text" [(ngModel)]="fila.fecha" [name]="'fecha' + i" />
+          </label>
+        </div>
+        <div class="rejilla-3">
+          <label>N.° de días
+            <input type="number" min="1" [(ngModel)]="fila.dias" [name]="'dias' + i" />
+          </label>
+          <label>N.° de docentes
+            <input type="number" min="1" [(ngModel)]="fila.numDocentes" [name]="'nd' + i" />
+          </label>
+          <label>N.° de estudiantes
+            <input type="number" min="0" [(ngModel)]="fila.numEstudiantes" [name]="'ne' + i" />
+          </label>
+        </div>
+        <ul class="calculo">
+          <li>Viáticos docentes: <strong>{{ moneda(viaticoFila(fila)) }}</strong></li>
+          <li>Auxilios estudiantes: <strong>{{ moneda(auxilioFila(fila)) }}</strong></li>
+          <li>Total fila: <strong>{{ moneda(totalFila(fila)) }}</strong></li>
+        </ul>
+      </div>
+      <button type="button" class="btn btn--secundario" (click)="agregarFila()">Agregar fila</button>
+
+      <h3>Expedición y firmas</h3>
+      <div class="rejilla-3">
+        <label>Día (número)
+          <input type="text" [(ngModel)]="resolucion.diaExpedicion" name="diaNum" placeholder="15" />
+        </label>
+        <label>Día (letras)
+          <input type="text" [(ngModel)]="resolucion.diaExpedicionLetras" name="diaLet" placeholder="quince" />
+        </label>
+        <label>Mes
+          <input type="text" [(ngModel)]="resolucion.mesExpedicion" name="mes" placeholder="marzo" />
+        </label>
+      </div>
+      <div class="rejilla-2">
+        <label>Decana
+          <input type="text" [(ngModel)]="resolucion.decana" name="decana" />
+        </label>
+        <label>Revisó
+          <input type="text" [(ngModel)]="resolucion.revisoNombre" name="reviso" />
+        </label>
+      </div>
+    </section>
+
+    <!-- ---------- Panel: considerandos ---------- -->
+    <section *ngIf="panel === 'considerandos'" class="panel">
+      <div class="panel__acciones">
+        <button type="button" class="btn btn--secundario" (click)="agregarConsiderando()">Agregar considerando</button>
+        <button type="button" class="btn btn--texto" (click)="restaurarConsiderandos()">Restaurar texto original</button>
+      </div>
+
+      <article class="parrafo-editor"
+               *ngFor="let c of resolucion.considerandos; let i = index; trackBy: trackPorId">
+        <div class="parrafo-editor__barra">
+          <span class="parrafo-editor__numero">{{ i + 1 }}</span>
+          <div class="parrafo-editor__botones">
+            <button type="button" (click)="subirParrafo(resolucion.considerandos, i)" [disabled]="i === 0" title="Subir">↑</button>
+            <button type="button" (click)="bajarParrafo(resolucion.considerandos, i)" [disabled]="i === resolucion.considerandos.length - 1" title="Bajar">↓</button>
+            <button type="button" (click)="eliminarParrafo(resolucion.considerandos, i)" title="Eliminar">✕</button>
+          </div>
+        </div>
+        <textarea rows="5" [(ngModel)]="c.texto" [name]="'cons' + i"></textarea>
+        <div class="tokens">
+          <button type="button" *ngFor="let t of tokens" (click)="insertarToken(c, t.token)"
+                  [title]="t.descripcion">{{ t.token }}</button>
+        </div>
+      </article>
+    </section>
+
+    <!-- ---------- Panel: artículos ---------- -->
+    <section *ngIf="panel === 'articulos'" class="panel">
+      <div class="panel__acciones">
+        <button type="button" class="btn btn--texto" (click)="restaurarArticulos()">Restaurar texto original</button>
+      </div>
+
+      <article class="parrafo-editor"
+               *ngFor="let a of resolucion.articulos; let i = index; trackBy: trackPorId">
+        <div class="parrafo-editor__barra">
+          <input class="parrafo-editor__rotulo" type="text" [(ngModel)]="a.rotulo" [name]="'rot' + i" />
+          <div class="parrafo-editor__botones">
+            <button type="button" (click)="subirParrafo(resolucion.articulos, i)" [disabled]="i === 0" title="Subir">↑</button>
+            <button type="button" (click)="bajarParrafo(resolucion.articulos, i)" [disabled]="i === resolucion.articulos.length - 1" title="Bajar">↓</button>
+            <button type="button" (click)="eliminarParrafo(resolucion.articulos, i)" title="Eliminar">✕</button>
+          </div>
+        </div>
+        <textarea rows="5" [(ngModel)]="a.texto" [name]="'art' + i"></textarea>
+        <div class="tokens">
+          <button type="button" *ngFor="let t of tokens" (click)="insertarToken(a, t.token)"
+                  [title]="t.descripcion">{{ t.token }}</button>
+        </div>
+      </article>
+
+      <h3>Viñetas del Artículo Primero</h3>
+      <label class="vineta" *ngFor="let v of resolucion.vinetasArticuloPrimero; let i = index">
+        <textarea rows="2" [(ngModel)]="resolucion.vinetasArticuloPrimero[i]" [name]="'vin' + i"></textarea>
+      </label>
+    </section>
+  </aside>
+
+  <!-- ================= VISTA PREVIA / DOCUMENTO IMPRIMIBLE ================= -->
+  <main class="hoja" id="hojaResolucion">
+
+    <h1 class="hoja__facultad">FACULTAD DEL MEDIO AMBIENTE Y RECURSOS NATURALES</h1>
+
+    <h2 class="hoja__titulo">
+      RESOLUCIÓN NÚMERO {{ resolucion.numero }} DE {{ resolucion.anio }}
+    </h2>
+
+    <p class="hoja__epigrafe">
+      "Por la cual se autoriza un avance a un Docente para el desarrollo de una actividad académica"
+    </p>
+
+    <p class="hoja__parrafo">
+      La Decana de la Facultad del Medio Ambiente y Recursos Naturales de la Universidad Distrital
+      Francisco José de Caldas, en uso de sus atributos legales, estatutarias, y
+    </p>
+
+    <h3 class="hoja__seccion">CONSIDERANDO</h3>
+
+    <p class="hoja__parrafo" *ngFor="let c of resolucion.considerandos"
+       [innerHTML]="interpolar(c.texto)"></p>
+
+    <h3 class="hoja__seccion">RESUELVE</h3>
+
+    <table class="hoja__tabla">
+      <thead>
+        <tr>
+          <th>ASIGNATURA</th>
+          <th>DOCENTES</th>
+          <th>SITIO DE DESARROLLO</th>
+          <th>FECHA</th>
+          <th>No. DE DÍAS</th>
+          <th>AUXILIO ESTUDIANTES</th>
+          <th>TOTAL DISPONIBILIDAD</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let fila of resolucion.filas">
+          <td>{{ fila.asignatura }}</td>
+          <td>{{ fila.docentes }}</td>
+          <td>{{ fila.sitio }}</td>
+          <td>{{ fila.fecha }}</td>
+          <td class="centro">{{ fila.dias }}</td>
+          <td>{{ textoAuxilio(fila) }}</td>
+          <td class="derecha">{{ moneda(totalFila(fila)) }}</td>
+        </tr>
+      </tbody>
+      <tfoot *ngIf="resolucion.filas.length > 1">
+        <tr>
+          <td colspan="6" class="derecha"><strong>TOTAL</strong></td>
+          <td class="derecha"><strong>{{ moneda(totalGeneral) }}</strong></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <ng-container *ngFor="let a of resolucion.articulos; let i = index">
+      <p class="hoja__parrafo">
+        <strong>{{ a.rotulo }}</strong>
+        <span [innerHTML]="' ' + interpolar(a.texto)"></span>
+      </p>
+
+      <ul class="hoja__vinetas" *ngIf="i === 0 && resolucion.vinetasArticuloPrimero.length">
+        <li *ngFor="let v of resolucion.vinetasArticuloPrimero" [innerHTML]="interpolar(v)"></li>
+      </ul>
+    </ng-container>
+
+    <h3 class="hoja__seccion">COMUNÍQUESE Y CÚMPLASE</h3>
+
+    <p class="hoja__parrafo">
+      Dada en la Decanatura de la Facultad del Medio Ambiente y Recursos Naturales a los
+      {{ resolucion.diaExpedicionLetras || 'xxxx' }} ({{ resolucion.diaExpedicion || 'xx' }}) días
+      del mes de {{ resolucion.mesExpedicion || 'xxxxx' }} de {{ resolucion.anio }}.
+    </p>
+
+    <div class="hoja__firma">
+      <p class="hoja__firmante">{{ resolucion.decana }}</p>
+      <p>Decana Facultad del Medio Ambiente y Recursos Naturales</p>
+    </div>
+
+    <table class="hoja__tabla hoja__tabla--firmas">
+      <thead>
+        <tr>
+          <th></th>
+          <th>NOMBRE</th>
+          <th>CARGO</th>
+          <th>FIRMA</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Revisó</strong></td>
+          <td>{{ resolucion.revisoNombre }}</td>
+          <td>{{ resolucion.revisoCargo }}</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><strong>Aprobó:</strong></td>
+          <td>{{ resolucion.decana | titlecase }}</td>
+          <td>Decana FAMARENA</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+</div>

@@ -29,7 +29,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { OasGridColsDirective } from './directives/oas-grid-cols.directive';
-
+import { ChatbotComponent } from '../componentes/chatbot.component';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { InterceptorService } from '../loader/interceptor.service';
 import { NavGuard } from '../@core/components/guard/nav.guard';
@@ -66,6 +66,7 @@ const materialModules = [
   declarations: [
     ...pagesComponents,
     OasGridColsDirective,
+    ChatbotComponent,
   ],
   imports: [
     HttpClientModule,

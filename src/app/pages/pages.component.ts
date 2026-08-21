@@ -11,6 +11,7 @@ import { VinculacionTercero } from '../@core/models/vinculacion_tercero';
   template: `<div *ngIf="loaded" class="main-container">
               <div class="username-info">Bienvenido <br>{{terceroName}}</div>
               <router-outlet></router-outlet>
+              <app-chatbot></app-chatbot>
             </div>`,
 })
 export class PagesComponent implements OnInit {
